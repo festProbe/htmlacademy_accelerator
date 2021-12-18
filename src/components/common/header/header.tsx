@@ -1,23 +1,25 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getGuitars } from '../../../store/selectors';
+import { GuitarType } from '../../../types/data';
 import { AppRoute } from '../../../utils/const';
 
 function Header(): JSX.Element {
   const [searchText, setSearchText] = useState('');
+  const [filteredGuitars, setFilteredGuitars] = useState<GuitarType[] | null>(null);
   const searchValue = useRef(null);
   const guitars = useSelector(getGuitars);
-  const guitarsNames = guitars.map((guitar) => guitar.name).slice(0, 4);
-  const searchSelectList = guitarsNames.map((guitarName) => (
-    <li className="form-search__select-item" tabIndex={0} key={guitarName}>{guitarName}</li>
-  ));
+
+  useEffect(() => {
+    setFilteredGuitars(guitars.filter((guitar) => guitar.name.toLowerCase().includes(searchText.toLowerCase())));
+  }, [searchText]);
+
+
   const changeTextHandler = (evt: ChangeEvent<HTMLInputElement>): void => {
     setSearchText(evt.target.value);
-    if (searchText !== '') {
-      document.querySelector('.form-search__select-list')?.classList.remove('hidden');
-    }
   };
+
   return (
     <header className="header" id="header">
       <div className="container header__wrapper"><Link className="header__logo logo" to="/"><img className="logo__img" width="70" height="70" src="./img/svg/logo.svg" alt="Логотип" /></Link>
@@ -43,14 +45,28 @@ function Header(): JSX.Element {
               id="search" type="text"
               autoComplete="off"
               placeholder="что вы ищите?"
-              ref={searchValue}
+              ref={searchValue.current}
               value={searchText}
               onChange={changeTextHandler}
             />
             <label className="visually-hidden" htmlFor="search">Поиск</label>
           </form>
-          <ul className="form-search__select-list hidden">
-            {searchSelectList}
+          <ul className={`form-search__select-list ${searchText === '' ? 'hidden' : ''}`} >
+            {
+              filteredGuitars?.length !== undefined && filteredGuitars?.length > 0
+                ? filteredGuitars?.map((guitar) => (
+                  <Link to={`${AppRoute.PRODUCT}/${guitar.id}`} key={guitar.id}>
+                    <li
+                      className="form-search__select-item"
+                      tabIndex={0}
+                      key={guitar.id}
+                    >
+                      {guitar.name}
+                    </li>
+                  </Link>
+                ))
+                : <li className="form-search__select-item" tabIndex={0} key={0}>К сожалению у нас нет гитар с таким названием.</li>
+            }
           </ul>
         </div>
         <Link className="header__cart-link" to={AppRoute.CART} aria-label="Корзина">
@@ -61,7 +77,7 @@ function Header(): JSX.Element {
           <span className="header__cart-count">2</span>
         </Link>
       </div>
-    </header>
+    </header >
   );
 }
 
