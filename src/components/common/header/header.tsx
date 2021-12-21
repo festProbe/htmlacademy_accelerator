@@ -13,7 +13,7 @@ function Header(): JSX.Element {
 
   useEffect(() => {
     setFilteredGuitars(guitars.filter((guitar) => guitar.name.toLowerCase().includes(searchText.toLowerCase())));
-  }, [searchText]);
+  }, [guitars, searchText]);
 
 
   const changeTextHandler = (evt: ChangeEvent<HTMLInputElement>): void => {
