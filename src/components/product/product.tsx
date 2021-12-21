@@ -1,7 +1,31 @@
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getProductInfo } from '../../store/selectors';
 import MainLayout from '../common/main-layout/main-layout';
 
 function Product(): JSX.Element {
+  const guitar = useSelector(getProductInfo);
+
+  if (!guitar) {
+    return (<div>Loading...</div>);
+  }
+
+  const { name, rating, previewImg, vendorCode, type, stringCount, description, id } = guitar;
+
+  const stars = [];
+  for (let i = 0; i < Math.round(rating); i++) {
+    stars.push(
+      <svg width="12" height="11" aria-hidden="true" key={id + i}>
+        <use xlinkHref="#icon-full-star"></use>
+      </svg>);
+  }
+  for (let i = 5; i > Math.round(rating); i--) {
+    stars.push(
+      <svg width="12" height="11" aria-hidden="true" key={id - i}>
+        <use xlinkHref="#icon-star"></use>
+      </svg>);
+  }
+
   return (
     <MainLayout>
       <main className="page-content">
@@ -15,25 +39,12 @@ function Product(): JSX.Element {
             <li className="breadcrumbs__item"><Link className="link" to="/">Товар</Link>
             </li>
           </ul>
-          <div className="product-container"><img className="product-container__img" src="img/content/catalog-product-2.jpg" srcSet="img/content/catalog-product-2@2x.jpg 2x" width="90" height="235" alt="" />
+          <div className="product-container"><img className="product-container__img" src={previewImg} srcSet={`${previewImg} 2x`} width="90" height="235" alt={name} />
             <div className="product-container__info-wrapper">
-              <h2 className="product-container__title title title--big title--uppercase">СURT Z30 Plus</h2>
+              <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
               <div className="rate product-container__rating" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-                <svg width="14" height="14" aria-hidden="true">
-                  <use xlinkHref="#icon-full-star"></use>
-                </svg>
-                <svg width="14" height="14" aria-hidden="true">
-                  <use xlinkHref="#icon-full-star"></use>
-                </svg>
-                <svg width="14" height="14" aria-hidden="true">
-                  <use xlinkHref="#icon-full-star"></use>
-                </svg>
-                <svg width="14" height="14" aria-hidden="true">
-                  <use xlinkHref="#icon-full-star"></use>
-                </svg>
-                <svg width="14" height="14" aria-hidden="true">
-                  <use xlinkHref="#icon-star"></use>
-                </svg><span className="rate__count"></span><span className="rate__message"></span>
+                {stars}
+                <span className="rate__count"></span><span className="rate__message"></span>
               </div>
               <div className="tabs"><Link className="button button--medium tabs__button" to="/characteristics">Характеристики</Link><Link className="button button--black-border button--medium tabs__button" to="/">Описание</Link>
                 <div className="tabs__content" id="characteristics">
@@ -41,19 +52,19 @@ function Product(): JSX.Element {
                     <tbody>
                       <tr className="tabs__table-row">
                         <td className="tabs__title">Артикул:</td>
-                        <td className="tabs__value">SO754565</td>
+                        <td className="tabs__value">{vendorCode}</td>
                       </tr>
                       <tr className="tabs__table-row">
                         <td className="tabs__title">Тип:</td>
-                        <td className="tabs__value">Электрогитара</td>
+                        <td className="tabs__value">{type}</td>
                       </tr>
                       <tr className="tabs__table-row">
                         <td className="tabs__title">Количество струн:</td>
-                        <td className="tabs__value">6 струнная</td>
+                        <td className="tabs__value">{stringCount} струнная</td>
                       </tr>
                     </tbody>
                   </table>
-                  <p className="tabs__product-description hidden">Гитара подходит как для старта обучения, так и для домашних занятий или использования в полевых условиях, например, в походах или для проведения уличных выступлений. Доступная стоимость, качество и надежная конструкция, а также приятный внешний вид, который сделает вас звездой вечеринки.</p>
+                  <p className="tabs__product-description hidden">{description}</p>
                 </div>
               </div>
             </div>
@@ -152,7 +163,7 @@ function Product(): JSX.Element {
           </section>
         </div>
       </main>
-    </MainLayout>
+    </MainLayout >
   );
 }
 
