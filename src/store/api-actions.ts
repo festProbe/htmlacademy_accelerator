@@ -15,7 +15,7 @@ export const fetchGuitarsAction = (): ThunkActionResult =>
     }
   };
 
-export const fetchGuitarAction = (id: number): ThunkActionResult =>
+export const fetchGuitarAction = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
       const { data } = await api.get<GuitarType>(`${APIRoute.GUITARS}/${id}`);

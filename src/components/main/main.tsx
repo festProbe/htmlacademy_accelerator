@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../common/main-layout/main-layout';
 import GuitarsList from './guitars-list/guitars-list';
+import { useSelector } from 'react-redux';
+import { getGuitars } from '../../store/selectors';
+import { stringsCount } from '../../utils/const';
 
 function Main(): JSX.Element {
+  const guitars = useSelector(getGuitars);
+  const [stringFilter, setStringFilter] = useState([true, false, false, true]);
 
   return (
     <MainLayout>
@@ -49,22 +54,25 @@ function Main(): JSX.Element {
               </fieldset>
               <fieldset className="catalog-filter__block">
                 <legend className="catalog-filter__block-title">Количество струн</legend>
-                <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="4-strings" name="4-strings" defaultChecked />
-                  <label htmlFor="4-strings">4</label>
-                </div>
-                <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="6-strings" name="6-strings" defaultChecked />
-                  <label htmlFor="6-strings">6</label>
-                </div>
-                <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="7-strings" name="7-strings" />
-                  <label htmlFor="7-strings">7</label>
-                </div>
-                <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="12-strings" name="12-strings" defaultChecked />
-                  <label htmlFor="12-strings">12</label>
-                </div>
+                {stringsCount.map((stringCount, id) => {
+                  const keyValue = `${id} - strings`;
+                  return (
+                    <div className="form-checkbox catalog-filter__block-item" key={keyValue}>
+                      <input
+                        className="visually-hidden"
+                        type="checkbox"
+                        id={`${stringCount}-strings`}
+                        name={`${stringCount}-strings`}
+                        checked={stringFilter[id]}
+                        onChange={({ target }: ChangeEvent<HTMLInputElement>) => {
+                          const value = target.checked;
+                          setStringFilter([...stringFilter.slice(0, id), value, ...stringFilter.slice(id + 1)]);
+                        }}
+                      />
+                      <label htmlFor={`${stringCount}-strings`}>{stringCount}</label>
+                    </div>
+                  );
+                })}
               </fieldset>
             </form>
             <div className="catalog-sort">
@@ -78,7 +86,7 @@ function Main(): JSX.Element {
                 <button className="catalog-sort__order-button catalog-sort__order-button--down" aria-label="По убыванию"></button>
               </div>
             </div>
-            <GuitarsList />
+            <GuitarsList guitars={guitars} />
             <div className="pagination page-content__pagination">
               <ul className="pagination__list">
                 <li className="pagination__page pagination__page--active"><Link className="link pagination__page-link" to="/">1</Link>

@@ -10,3 +10,5 @@ export enum APIRoute {
   COUPONS = '/coupons',
   ORDERS = '/orders'
 }
+
+export const stringsCount = [4, 6, 7, 12];

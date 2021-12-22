@@ -12,7 +12,7 @@ function App(): JSX.Element {
       <Route path="/cart" exact>
         <Cart />
       </Route>
-      <Route path="/product" exact>
+      <Route path="/product/:id" exact>
         <Product />
       </Route>
     </Switch>

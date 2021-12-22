@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { getGuitars } from '../../../store/selectors';
 import { GuitarType } from '../../../types/data';
 import { AppRoute } from '../../../utils/const';
+import logo from '../../../img/svg/logo.svg';
 
 function Header(): JSX.Element {
   const [searchText, setSearchText] = useState('');
@@ -22,7 +23,7 @@ function Header(): JSX.Element {
 
   return (
     <header className="header" id="header">
-      <div className="container header__wrapper"><Link className="header__logo logo" to="/"><img className="logo__img" width="70" height="70" src="./img/svg/logo.svg" alt="Логотип" /></Link>
+      <div className="container header__wrapper"><Link className="header__logo logo" to="/"><img className="logo__img" width="70" height="70" src={logo} alt="Логотип" /></Link>
         <nav className="main-nav">
           <ul className="main-nav__list">
             <li><Link className="link main-nav__link" to="/">Каталог</Link>
@@ -55,7 +56,7 @@ function Header(): JSX.Element {
             {
               filteredGuitars?.length !== undefined && filteredGuitars?.length > 0
                 ? filteredGuitars?.map((guitar) => (
-                  <Link to={`${AppRoute.PRODUCT}/${guitar.id}`} key={guitar.id}>
+                  <Link to={`${AppRoute.PRODUCT}/${guitar.id}`} key={guitar.id} onClick={() => { setSearchText(''); }}>
                     <li
                       className="form-search__select-item"
                       tabIndex={0}

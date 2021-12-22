@@ -1,27 +1,36 @@
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { fetchGuitarAction } from '../../store/api-actions';
 import { getProductInfo } from '../../store/selectors';
+import LoadingScreen from '../common/loading-screen/loading-screen';
 import MainLayout from '../common/main-layout/main-layout';
 
 function Product(): JSX.Element {
+  const { id } = useParams<{ id: string }>();
+  const dispatch = useDispatch();
   const guitar = useSelector(getProductInfo);
 
+  useEffect(() => {
+    dispatch(fetchGuitarAction(id));
+  }, [id, dispatch]);
+
   if (!guitar) {
-    return (<div>Loading...</div>);
+    return <LoadingScreen />;
   }
 
-  const { name, rating, previewImg, vendorCode, type, stringCount, description, id } = guitar;
+  const { name, rating, previewImg, vendorCode, type, stringCount, description, price } = guitar;
 
   const stars = [];
   for (let i = 0; i < Math.round(rating); i++) {
     stars.push(
-      <svg width="12" height="11" aria-hidden="true" key={id + i}>
+      <svg width="12" height="11" aria-hidden="true" key={`${vendorCode} ${i}`}>
         <use xlinkHref="#icon-full-star"></use>
       </svg>);
   }
   for (let i = 5; i > Math.round(rating); i--) {
     stars.push(
-      <svg width="12" height="11" aria-hidden="true" key={id - i}>
+      <svg width="12" height="11" aria-hidden="true" key={`${vendorCode} ${id + 1}`}>
         <use xlinkHref="#icon-star"></use>
       </svg>);
   }
@@ -39,7 +48,7 @@ function Product(): JSX.Element {
             <li className="breadcrumbs__item"><Link className="link" to="/">Товар</Link>
             </li>
           </ul>
-          <div className="product-container"><img className="product-container__img" src={previewImg} srcSet={`${previewImg} 2x`} width="90" height="235" alt={name} />
+          <div className="product-container"><img className="product-container__img" src={`../${previewImg}`} srcSet={`%PUBLIC_URL%/${previewImg} 2x`} width="90" height="235" alt={name} />
             <div className="product-container__info-wrapper">
               <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
               <div className="rate product-container__rating" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
@@ -70,7 +79,7 @@ function Product(): JSX.Element {
             </div>
             <div className="product-container__price-wrapper">
               <p className="product-container__price-info product-container__price-info--title">Цена:</p>
-              <p className="product-container__price-info product-container__price-info--value">52 000 ₽</p><Link className="button button--red button--big product-container__button" to="/">Добавить в корзину</Link>
+              <p className="product-container__price-info product-container__price-info--value">{price} ₽</p><Link className="button button--red button--big product-container__button" to="/">Добавить в корзину</Link>
             </div>
           </div>
           <section className="reviews">

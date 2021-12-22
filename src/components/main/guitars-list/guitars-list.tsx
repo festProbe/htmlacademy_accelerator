@@ -1,9 +1,12 @@
-import { useSelector } from 'react-redux';
-import { getGuitars } from '../../../store/selectors';
+import { GuitarType } from '../../../types/data';
 import Card from '../card/card';
 
-function GuitarsList(): JSX.Element {
-  const guitars = useSelector(getGuitars);
+type GuitarListProps = {
+  guitars: GuitarType[];
+}
+
+function GuitarsList({ guitars }: GuitarListProps): JSX.Element {
+
   const cards = guitars.map((guitar) => (
     <Card
       guitar={guitar}
