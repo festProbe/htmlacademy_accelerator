@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getGuitars } from '../../../store/selectors';
+import { selectGuitars } from '../../../store/selectors';
 import { GuitarType } from '../../../types/data';
 import { AppRoute } from '../../../utils/const';
 import logo from '../../../img/svg/logo.svg';
@@ -10,7 +10,7 @@ function Header(): JSX.Element {
   const [searchText, setSearchText] = useState('');
   const [filteredGuitars, setFilteredGuitars] = useState<GuitarType[] | null>(null);
   const searchValue = useRef(null);
-  const guitars = useSelector(getGuitars);
+  const guitars = useSelector(selectGuitars);
 
   useEffect(() => {
     setFilteredGuitars(guitars.filter((guitar) => guitar.name.toLowerCase().includes(searchText.toLowerCase())));

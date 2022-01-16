@@ -1,7 +1,7 @@
 import { ThunkActionResult } from '../types/actions';
-import { GuitarType } from '../types/data';
+import { GuitarType, CommentType } from '../types/data';
 import { APIRoute } from '../utils/const';
-import { loadGuitars, loadProductInfo } from './actions';
+import { loadGuitars, loadProductInfo, loadComments } from './actions';
 import { toast } from 'react-toastify';
 
 export const fetchGuitarsAction = (): ThunkActionResult =>
@@ -23,5 +23,16 @@ export const fetchGuitarAction = (id: string): ThunkActionResult =>
     }
     catch {
       toast.error('Ошибка при загрузке информации о товаре.');
+    }
+  };
+
+export const fetchCommentsAction = (id: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      const { data } = await api.get<CommentType[]>(`${APIRoute.GUITARS}/${id}/${APIRoute.COMMENTS}`);
+      dispatch(loadComments(data));
+    }
+    catch {
+      toast.error('Ошибка при загрузке комментариев');
     }
   };

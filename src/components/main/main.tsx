@@ -1,14 +1,78 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../common/main-layout/main-layout';
 import GuitarsList from './guitars-list/guitars-list';
-import { useSelector } from 'react-redux';
-import { getGuitars } from '../../store/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectGuitars,
+  selectGuitarsByPriceFromLow,
+  selectGuitarsByPriceFromHigh,
+  selectGuitarsByPopularityFromLow,
+  selectGuitarsByPopularityFromHigh,
+  selectStringCountFilter
+} from '../../store/selectors';
 import { stringsCount } from '../../utils/const';
+import { setFilter } from '../../store/actions';
+import { GuitarType } from '../../types/data';
 
 function Main(): JSX.Element {
-  const guitars = useSelector(getGuitars);
-  const [stringFilter, setStringFilter] = useState([true, false, false, true]);
+  const dispatch = useDispatch();
+  const [sortType, setSortType] = useState('');
+  const [sortOrder, setSortOrder] = useState('');
+  const guitarsByPopularityFromLow = useSelector(selectGuitarsByPopularityFromLow);
+  const guitarsByPopularityFromHigh = useSelector(selectGuitarsByPopularityFromHigh);
+  const guitarsByPriceFromLow = useSelector(selectGuitarsByPriceFromLow);
+  const guitarsByPriceFromHigh = useSelector(selectGuitarsByPriceFromHigh);
+  const allGuitars = useSelector(selectGuitars);
+  const stringCountFilter = useSelector(selectStringCountFilter);
+
+  const getGuitars = (type: string): GuitarType[] => {
+    switch (type) {
+      case 'popularity':
+        if (sortOrder === 'fromHigh') {
+          return guitarsByPopularityFromHigh;
+        } else if (sortOrder === 'fromLow') {
+          return guitarsByPopularityFromLow;
+        }
+        setSortOrder('fromLow');
+        document.querySelector('.catalog-sort__order-button--up')?.classList.add('catalog-sort__order-button--active');
+        return guitarsByPopularityFromLow;
+      case 'price':
+        if (sortOrder === 'fromHigh') {
+          return guitarsByPriceFromHigh;
+        } else if (sortOrder === 'fromLow') {
+          return guitarsByPriceFromLow;
+        }
+        setSortOrder('fromLow');
+        document.querySelector('.catalog-sort__order-button--up')?.classList.add('catalog-sort__order-button--active');
+        return guitarsByPriceFromLow;
+      default:
+        if (sortOrder === 'fromLow') {
+          setSortType('price');
+          document.querySelector('.catalog-sort__type-button--price')?.classList.add('catalog-sort__type-button--active');
+          return guitarsByPriceFromLow;
+        } else if (sortOrder === 'fromHigh') {
+          setSortType('price');
+          document.querySelector('.catalog-sort__type-button--price')?.classList.add('catalog-sort__type-button--active');
+          return guitarsByPriceFromHigh;
+        }
+        return allGuitars;
+    }
+  };
+
+  const guitars = getGuitars(sortType);
+
+  const sortTypeClickHandler = (evt: MouseEvent<HTMLButtonElement>) => {
+    setSortType(evt.currentTarget.value);
+    document.querySelector('.catalog-sort__type-button--active')?.classList.remove('catalog-sort__type-button--active');
+    evt.currentTarget.classList.add('catalog-sort__type-button--active');
+  };
+
+  const sortOrderClickHandler = (evt: MouseEvent<HTMLButtonElement>) => {
+    setSortOrder(evt.currentTarget.value);
+    document.querySelector('.catalog-sort__order-button--active')?.classList.remove('catalog-sort__order-button--active');
+    evt.currentTarget.classList.add('catalog-sort__order-button--active');
+  };
 
   return (
     <MainLayout>
@@ -63,10 +127,10 @@ function Main(): JSX.Element {
                         type="checkbox"
                         id={`${stringCount}-strings`}
                         name={`${stringCount}-strings`}
-                        checked={stringFilter[id]}
+                        checked={stringCountFilter[id]}
                         onChange={({ target }: ChangeEvent<HTMLInputElement>) => {
                           const value = target.checked;
-                          setStringFilter([...stringFilter.slice(0, id), value, ...stringFilter.slice(id + 1)]);
+                          dispatch(setFilter([...stringCountFilter.slice(0, id), value, ...stringCountFilter.slice(id + 1)]));
                         }}
                       />
                       <label htmlFor={`${stringCount}-strings`}>{stringCount}</label>
@@ -78,12 +142,12 @@ function Main(): JSX.Element {
             <div className="catalog-sort">
               <h2 className="catalog-sort__title">Сортировать:</h2>
               <div className="catalog-sort__type">
-                <button className="catalog-sort__type-button catalog-sort__type-button--active" aria-label="по цене" tabIndex={-1}>по цене</button>
-                <button className="catalog-sort__type-button" aria-label="по популярности">по популярности</button>
+                <button className="catalog-sort__type-button catalog-sort__type-button--price" aria-label="по цене" value='price' tabIndex={-1} onClick={sortTypeClickHandler}>по цене</button>
+                <button className="catalog-sort__type-button" aria-label="по популярности" value='popularity' onClick={sortTypeClickHandler}>по популярности</button>
               </div>
               <div className="catalog-sort__order">
-                <button className="catalog-sort__order-button catalog-sort__order-button--up catalog-sort__order-button--active" aria-label="По возрастанию" tabIndex={-1}></button>
-                <button className="catalog-sort__order-button catalog-sort__order-button--down" aria-label="По убыванию"></button>
+                <button className="catalog-sort__order-button catalog-sort__order-button--up" aria-label="По возрастанию" value="fromLow" tabIndex={-1} onClick={sortOrderClickHandler}></button>
+                <button className="catalog-sort__order-button catalog-sort__order-button--down" value="fromHigh" aria-label="По убыванию" onClick={sortOrderClickHandler}></button>
               </div>
             </div>
             <GuitarsList guitars={guitars} />
