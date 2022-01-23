@@ -11,4 +11,8 @@ export enum APIRoute {
   ORDERS = '/orders'
 }
 
-export const stringsCount = [4, 6, 7, 12];
+export const typesOfGuitars = {
+  acoustic: ['6', '7', '12'],
+  electric: ['4, 6, 7'],
+  ukulele: ['4'],
+};
