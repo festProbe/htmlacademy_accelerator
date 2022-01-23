@@ -19,12 +19,8 @@ function Filter(): JSX.Element {
     if (guitarTypes.includes('acoustic') && guitarTypes.length > 1) {
       document.querySelectorAll('.catalog-filter__strings').forEach((stringsCount) => stringsCount.removeAttribute('disabled'));
     } else if (guitarTypes.includes('acoustic')) {
-      const index = stringsCounts.findIndex((guitarType) => guitarType === '4');
-      dispatch(setStringsCounts([...stringsCounts.slice(0, index), ...stringsCounts.slice(index + 1)]));
       document.querySelector('[id="4-strings"]')?.setAttribute('disabled', 'true');
     } else if (guitarTypes.includes('electric')) {
-      const index = stringsCounts.findIndex((guitarType) => guitarType === '12');
-      dispatch(setStringsCounts([...stringsCounts.slice(0, index), ...stringsCounts.slice(index + 1)]));
       document.querySelector('[id="12-strings"]')?.setAttribute('disabled', 'true');
     } else if (guitarTypes.includes('ukulele')) {
       dispatch(setStringsCounts(['4']));
@@ -64,6 +60,13 @@ function Filter(): JSX.Element {
       const newGuitarTypes = [...guitarTypes.slice(0, index), ...guitarTypes.slice(index + 1)];
       dispatch(setGuitarTypes(newGuitarTypes));
     } else {
+      if (evt.target.name === 'electric') {
+        const index = stringsCounts.findIndex((guitarType) => guitarType === '12');
+        dispatch(setStringsCounts([...stringsCounts.slice(0, index), ...stringsCounts.slice(index + 1)]));
+      } else if (evt.target.name === 'acoustic') {
+        const index = stringsCounts.findIndex((guitarType) => guitarType === '4');
+        dispatch(setStringsCounts([...stringsCounts.slice(0, index), ...stringsCounts.slice(index + 1)]));
+      }
       dispatch(setGuitarTypes([...guitarTypes, evt.target.name]));
     }
   };
