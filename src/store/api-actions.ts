@@ -10,9 +10,11 @@ export const fetchGuitarsAction = (): ThunkActionResult =>
       const startGuitarCount = `_start=${MAX_GUITARS_ON_PAGE * (_getState().currentPage - 1)}`;
       const endGuitarCount = `_end=${MAX_GUITARS_ON_PAGE * _getState().currentPage}`;
       const limitGuitarCount = `_limit=${MAX_GUITARS_ON_PAGE}`;
-      const { minPrice, maxPrice, sortType, sortOrder } = _getState();
+      const { minPrice, maxPrice, sortType, sortOrder, guitarTypes, stringsCounts } = _getState();
+      const typeQuery = guitarTypes.map((guitarType) => `&type=${guitarType}`).join('');
+      const stringCountQuery = stringsCounts.map((stringCount) => `&stringCount=${stringCount}`).join('');
 
-      const response = await api.get<GuitarType[]>(`${APIRoute.GUITARS}?${startGuitarCount}&${endGuitarCount}&${limitGuitarCount}${minPrice ? `&price_gte=${minPrice}` : ''}${maxPrice ? `&price_lte=${maxPrice}` : ''}${sortType ? `&_sort=${sortType}` : ''}${sortOrder ? `&_order=${sortOrder}` : ''}`);
+      const response = await api.get<GuitarType[]>(`${APIRoute.GUITARS}?${startGuitarCount}&${endGuitarCount}&${limitGuitarCount}${minPrice ? `&price_gte=${minPrice}` : ''}${maxPrice ? `&price_lte=${maxPrice}` : ''}${sortType ? `&_sort=${sortType}` : ''}${sortOrder ? `&_order=${sortOrder}` : ''}${typeQuery ? typeQuery : ''}${stringCountQuery ? stringCountQuery : ''}`);
       dispatch(loadGuitars(response.data));
       dispatch(loadTotalCount(response.headers['x-total-count']));
     }

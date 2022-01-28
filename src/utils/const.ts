@@ -1,5 +1,6 @@
 export enum AppRoute {
   MAIN = '/',
+  PAGE = '/catalog/page_',
   CART = '/cart',
   PRODUCT = '/product',
 }
@@ -10,11 +11,5 @@ export enum APIRoute {
   COUPONS = '/coupons',
   ORDERS = '/orders'
 }
-
-export const typesOfGuitars = {
-  acoustic: ['6', '7', '12'],
-  electric: ['4, 6, 7'],
-  ukulele: ['4'],
-};
 
 export const MAX_GUITARS_ON_PAGE = 9;

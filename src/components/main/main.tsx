@@ -1,14 +1,26 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import MainLayout from '../common/main-layout/main-layout';
 import GuitarsList from './guitars-list/guitars-list';
 import Sort from './sort/sort';
 import Filter from './filter/filter';
 import Pages from './pages/pages';
-import { useSelector } from 'react-redux';
-import { selectGuitarsByStringsCounts } from '../../store/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectGuitars } from '../../store/selectors';
+import { useEffect } from 'react';
+import { setCurrentPage } from '../../store/actions';
+import { fetchGuitarsAction } from '../../store/api-actions';
 
 function Main(): JSX.Element {
-  const guitars = useSelector(selectGuitarsByStringsCounts);
+  const guitars = useSelector(selectGuitars);
+  const dispatch = useDispatch();
+  const { page } = useParams<{ page: string }>();
+
+  useEffect(() => {
+    if (page) {
+      dispatch(setCurrentPage(Number(page)));
+      dispatch(fetchGuitarsAction());
+    }
+  }, [page, dispatch]);
 
   return (
     <MainLayout>

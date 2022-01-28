@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGuitarTypes, setMaxPrice, setMinPrice, setStringsCounts } from '../../../store/actions';
 import { fetchGuitarsAction } from '../../../store/api-actions';
@@ -15,22 +15,6 @@ function Filter(): JSX.Element {
   const guitarTypes = useSelector(selectGuitarTypes);
   const stringsCounts = useSelector(selectStringsCounts);
 
-  useEffect(() => {
-    document.querySelectorAll('.catalog-filter__strings').forEach((stringsCount) => stringsCount.removeAttribute('disabled'));
-    if (guitarTypes.includes('acoustic') && guitarTypes.length > 1) {
-      document.querySelectorAll('.catalog-filter__strings').forEach((stringsCount) => stringsCount.removeAttribute('disabled'));
-    } else if (guitarTypes.includes('acoustic')) {
-      document.querySelector('[id="4-strings"]')?.setAttribute('disabled', 'true');
-    } else if (guitarTypes.includes('electric')) {
-      document.querySelector('[id="12-strings"]')?.setAttribute('disabled', 'true');
-    } else if (guitarTypes.includes('ukulele')) {
-      dispatch(setStringsCounts(['4']));
-      document.querySelector('[id="6-strings"]')?.setAttribute('disabled', 'true');
-      document.querySelector('[id="7-strings"]')?.setAttribute('disabled', 'true');
-      document.querySelector('[id="12-strings"]')?.setAttribute('disabled', 'true');
-    }
-  }, [dispatch, guitarTypes]);
-
   const changeMinPriceHandler = () => {
     const number = /^([1-9]\d*)$/;
     if (minPrice.current?.value !== undefined && (minPrice.current?.value.match(number) || minPrice.current?.value === '')) {
@@ -39,9 +23,9 @@ function Filter(): JSX.Element {
   };
 
   const blurMinPriceFieldHandler = () => {
+    dispatch(fetchGuitarsAction());
     const min = Math.max(Number(minPrice.current?.value), placeholderMin).toString();
     dispatch(setMinPrice(min));
-    dispatch(fetchGuitarsAction());
   };
 
   const changeMaxPriceHandler = () => {
@@ -53,6 +37,8 @@ function Filter(): JSX.Element {
 
   const blurMaxPriceFieldHandler = () => {
     dispatch(fetchGuitarsAction());
+    const max = Math.min(Number(minPrice.current?.value), placeholderMax).toString();
+    dispatch(setMinPrice(max));
   };
 
   const changeGuitarTypeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +56,7 @@ function Filter(): JSX.Element {
       }
       dispatch(setGuitarTypes([...guitarTypes, evt.target.name]));
     }
+    dispatch(fetchGuitarsAction());
   };
 
   const changeStringsCountsHandler = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -80,6 +67,7 @@ function Filter(): JSX.Element {
     } else {
       dispatch(setStringsCounts([...stringsCounts, evt.target.value]));
     }
+    dispatch(fetchGuitarsAction());
   };
 
   return (
@@ -160,6 +148,7 @@ function Filter(): JSX.Element {
             name="4-strings"
             value='4'
             onChange={changeStringsCountsHandler}
+            disabled={!guitarTypes.includes('ukulele') && !guitarTypes.includes('electric') && guitarTypes.length > 0}
           />
           <label htmlFor="4-strings">4</label>
         </div>
@@ -171,6 +160,7 @@ function Filter(): JSX.Element {
             name="6-strings"
             value='6'
             onChange={changeStringsCountsHandler}
+            disabled={!guitarTypes.includes('electric') && !guitarTypes.includes('acoustic') && guitarTypes.length > 0}
           />
           <label htmlFor="6-strings">6</label>
         </div>
@@ -182,6 +172,7 @@ function Filter(): JSX.Element {
             name="7-strings"
             value='7'
             onChange={changeStringsCountsHandler}
+            disabled={!guitarTypes.includes('electric') && !guitarTypes.includes('acoustic') && guitarTypes.length > 0}
           />
           <label htmlFor="7-strings">7</label>
         </div>
@@ -193,6 +184,7 @@ function Filter(): JSX.Element {
             name="12-strings"
             value='12'
             onChange={changeStringsCountsHandler}
+            disabled={!guitarTypes.includes('acoustic') && guitarTypes.length > 0}
           />
           <label htmlFor="12-strings">12</label>
         </div>

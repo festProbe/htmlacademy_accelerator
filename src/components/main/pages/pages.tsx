@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { setCurrentPage } from '../../../store/actions';
 import { fetchGuitarsAction } from '../../../store/api-actions';
 import { selectCurrentPage, selectGuitarsCount } from '../../../store/selectors';
-import { MAX_GUITARS_ON_PAGE } from '../../../utils/const';
+import { AppRoute, MAX_GUITARS_ON_PAGE } from '../../../utils/const';
 
 function Pages(): JSX.Element {
   const dispatch = useDispatch();
@@ -44,22 +44,18 @@ function Pages(): JSX.Element {
           <li className="pagination__page pagination__page--prev" id="prev" onClick={handlePrevPageClick}>
             <Link
               className="link pagination__page-link"
-              to="/"
+              to={currentPage !== 2 ? `${AppRoute.PAGE}${currentPage - 1}` : AppRoute.MAIN}
             >
               Назад
             </Link>
           </li>}
 
 
-        {pageArr.map((page) => {
-          // eslint-disable-next-line no-console
-          console.log(page, currentPage);
-          return (
-            <li className={`pagination__page ${page === currentPage ? 'pagination__page--active' : ''}`} key={page} onClick={handlePageClick}>
-              <Link className="link pagination__page-link" to="/">{page}</Link>
-            </li>
-          );
-        })}
+        {pageArr.map((page) => (
+          <li className={`pagination__page ${page === currentPage ? 'pagination__page--active' : ''}`} key={page} onClick={handlePageClick}>
+            <Link className="link pagination__page-link" to={page !== 1 ? `${AppRoute.PAGE}${page}` : AppRoute.MAIN}>{page}</Link>
+          </li>
+        ))}
 
         {currentPage === pageCount
           ? ''
@@ -67,7 +63,7 @@ function Pages(): JSX.Element {
           <li className="pagination__page pagination__page--next" id="next" onClick={handleNextPageClick}>
             <Link
               className="link pagination__page-link"
-              to="/"
+              to={`${AppRoute.PAGE}${currentPage + 1}`}
             >
               Далее
             </Link>
