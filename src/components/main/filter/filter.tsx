@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGuitarTypes, setMaxPrice, setMinPrice, setStringsCounts } from '../../../store/actions';
+import { fetchGuitarsAction } from '../../../store/api-actions';
 import { selectGuitarTypes, selectMaxPrice, selectMaxPriceForPlaceholder, selectMinPrice, selectMinPriceForPlaceholder, selectStringsCounts } from '../../../store/selectors';
 
 function Filter(): JSX.Element {
@@ -38,8 +39,9 @@ function Filter(): JSX.Element {
   };
 
   const blurMinPriceFieldHandler = () => {
-    const min = Math.min(Math.max(Number(minPrice.current?.value), placeholderMin), placeholderMax).toString();
+    const min = Math.max(Number(minPrice.current?.value), placeholderMin).toString();
     dispatch(setMinPrice(min));
+    dispatch(fetchGuitarsAction());
   };
 
   const changeMaxPriceHandler = () => {
@@ -50,8 +52,7 @@ function Filter(): JSX.Element {
   };
 
   const blurMaxPriceFieldHandler = () => {
-    const max = Math.max(Math.min(Number(maxPrice.current?.value), placeholderMax), placeholderMin, Number(minPrice.current?.value)).toString();
-    dispatch(setMaxPrice(max));
+    dispatch(fetchGuitarsAction());
   };
 
   const changeGuitarTypeHandler = (evt: ChangeEvent<HTMLInputElement>) => {

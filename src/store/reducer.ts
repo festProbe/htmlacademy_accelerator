@@ -3,7 +3,9 @@ import { ReducerState } from '../types/state';
 import {
   loadComments,
   loadGuitars,
+  loadTotalCount,
   loadProductInfo,
+  setCurrentPage,
   setMinPrice,
   setMaxPrice,
   setSortType,
@@ -15,7 +17,9 @@ import {
 const initialState: ReducerState = {
   guitars: [],
   guitar: null,
+  totalCount: 0,
   comments: [],
+  currentPage: 1,
   minPrice: '',
   maxPrice: '',
   sortType: '',
@@ -32,8 +36,14 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(loadProductInfo, (state, action) => {
       state.guitar = action.payload;
     })
+    .addCase(loadTotalCount, (state, action) => {
+      state.totalCount = action.payload;
+    })
     .addCase(loadComments, (state, action) => {
       state.comments = action.payload;
+    })
+    .addCase(setCurrentPage, (state, action) => {
+      state.currentPage = action.payload;
     })
     .addCase(setMinPrice, (state, action) => {
       state.minPrice = action.payload;

@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom';
 import MainLayout from '../common/main-layout/main-layout';
 import GuitarsList from './guitars-list/guitars-list';
-import { useSelector } from 'react-redux';
-import {
-  selectGuitarsByStringsCounts
-} from '../../store/selectors';
 import Sort from './sort/sort';
 import Filter from './filter/filter';
+import Pages from './pages/pages';
+import { useSelector } from 'react-redux';
+import { selectGuitarsByStringsCounts } from '../../store/selectors';
 
 function Main(): JSX.Element {
   const guitars = useSelector(selectGuitarsByStringsCounts);
@@ -26,18 +25,7 @@ function Main(): JSX.Element {
             <Filter />
             <Sort />
             <GuitarsList guitars={guitars} />
-            <div className="pagination page-content__pagination">
-              <ul className="pagination__list">
-                <li className="pagination__page pagination__page--active"><Link className="link pagination__page-link" to="/">1</Link>
-                </li>
-                <li className="pagination__page"><Link className="link pagination__page-link" to="/">2</Link>
-                </li>
-                <li className="pagination__page"><Link className="link pagination__page-link" to="/">3</Link>
-                </li>
-                <li className="pagination__page pagination__page--next" id="next"><Link className="link pagination__page-link" to="/">Далее</Link>
-                </li>
-              </ul>
-            </div>
+            <Pages />
           </div>
         </div>
       </main>

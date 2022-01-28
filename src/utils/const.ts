@@ -16,3 +16,5 @@ export const typesOfGuitars = {
   electric: ['4, 6, 7'],
   ukulele: ['4'],
 };
+
+export const MAX_GUITARS_ON_PAGE = 9;

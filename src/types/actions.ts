@@ -6,7 +6,9 @@ import { Action } from 'redux';
 export enum ActionType {
   LoadGuitars = 'main/loadGuitars',
   LoadProductInfo = 'product/productInfo',
+  LoadTotalCount = 'main/loadTotalCount',
   LoadComments = 'product/loadComments',
+  SetCurrentPage = 'main/setCurrentPage',
   SetMinPrice = 'main/filter/setMinPrice',
   SetMaxPrice = 'main/filter/setMaxPrice',
   SetGuitarTypes = 'main/filter/setGuitarTypes',

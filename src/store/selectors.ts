@@ -17,6 +17,8 @@ export const selectSortType = (state: ReducerState): string => state.sortType;
 export const selectSortOrder = (state: ReducerState): string => state.sortOrder;
 export const selectGuitarTypes = (state: ReducerState): string[] => state.guitarTypes;
 export const selectStringsCounts = (state: ReducerState): string[] => state.stringsCounts;
+export const selectGuitarsCount = (state: ReducerState): number => state.totalCount;
+export const selectCurrentPage = (state: ReducerState): number => state.currentPage;
 
 // Селекторы сортировки
 export const selectSortedGuitars = createSelector(
@@ -51,25 +53,9 @@ export const selectSortedGuitars = createSelector(
   });
 
 // Селекторы фильтрации
-export const selectFilteredGuitarsByPrice = createSelector(
-  selectSortedGuitars,
-  selectMinPrice,
-  selectMaxPrice,
-  (guitars, minPrice, maxPrice) => {
-    if (minPrice !== '' && maxPrice !== '') {
-      return guitars.filter((guitar) => guitar.price >= Number(minPrice) && guitar.price <= Number(maxPrice));
-    } else if (minPrice !== '') {
-      return guitars.filter((guitar) => guitar.price >= Number(minPrice));
-    } else if (maxPrice !== '') {
-      return guitars.filter((guitar) => guitar.price <= Number(maxPrice));
-    } else {
-      return guitars;
-    }
-  },
-);
 
 export const selectGuitarsByGuitarTypes = createSelector(
-  selectFilteredGuitarsByPrice,
+  selectSortedGuitars,
   selectGuitarTypes,
   (guitars, types) => {
     if (types.length !== 0) {

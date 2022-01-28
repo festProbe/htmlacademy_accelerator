@@ -4,7 +4,9 @@ import { CommentType, GuitarType } from '../types/data';
 
 export const loadGuitars = createAction<GuitarType[]>(ActionType.LoadGuitars);
 export const loadProductInfo = createAction<GuitarType>(ActionType.LoadProductInfo);
+export const loadTotalCount = createAction<number>(ActionType.LoadTotalCount);
 export const loadComments = createAction<CommentType[]>(ActionType.LoadComments);
+export const setCurrentPage = createAction<number>(ActionType.SetCurrentPage);
 export const setMinPrice = createAction<string>(ActionType.SetMinPrice);
 export const setMaxPrice = createAction<string>(ActionType.SetMaxPrice);
 export const setSortType = createAction<string>(ActionType.SetSortType);

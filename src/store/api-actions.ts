@@ -1,14 +1,20 @@
 import { ThunkActionResult } from '../types/actions';
 import { GuitarType, CommentType } from '../types/data';
-import { APIRoute } from '../utils/const';
-import { loadGuitars, loadProductInfo, loadComments } from './actions';
+import { APIRoute, MAX_GUITARS_ON_PAGE } from '../utils/const';
+import { loadGuitars, loadProductInfo, loadComments, loadTotalCount } from './actions';
 import { toast } from 'react-toastify';
 
 export const fetchGuitarsAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const { data } = await api.get<GuitarType[]>(APIRoute.GUITARS);
-      dispatch(loadGuitars(data));
+      const startGuitarCount = `_start=${MAX_GUITARS_ON_PAGE * (_getState().currentPage - 1)}`;
+      const endGuitarCount = `_end=${MAX_GUITARS_ON_PAGE * _getState().currentPage}`;
+      const limitGuitarCount = `_limit=${MAX_GUITARS_ON_PAGE}`;
+      const { minPrice, maxPrice, sortType, sortOrder } = _getState();
+
+      const response = await api.get<GuitarType[]>(`${APIRoute.GUITARS}?${startGuitarCount}&${endGuitarCount}&${limitGuitarCount}${minPrice ? `&price_gte=${minPrice}` : ''}${maxPrice ? `&price_lte=${maxPrice}` : ''}${sortType ? `&_sort=${sortType}` : ''}${sortOrder ? `&_order=${sortOrder}` : ''}`);
+      dispatch(loadGuitars(response.data));
+      dispatch(loadTotalCount(response.headers['x-total-count']));
     }
     catch {
       toast.error('Ошибка при загрузке объявлений.');
