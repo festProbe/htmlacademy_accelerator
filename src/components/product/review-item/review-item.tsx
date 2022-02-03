@@ -5,19 +5,19 @@ type ReviewItemProps = {
 }
 
 function ReviewItem({ comment }: ReviewItemProps): JSX.Element {
-  const { rating, advantages, createAt, disadvantages, userName, id } = comment;
+  const { rating, advantages, createAt, disadvantages, userName } = comment;
 
   const stars = [];
   for (let i = 0; i < Math.round(rating); i++) {
     stars.push(
-      <svg width="12" height="11" aria-hidden="true" key={id + i}>
+      <svg width="12" height="11" aria-hidden="true" key={i}>
         <use xlinkHref="#icon-full-star"></use>
       </svg>);
   }
 
   for (let i = 5; i > Math.round(rating); i--) {
     stars.push(
-      <svg width="12" height="11" aria-hidden="true" key={id + 7}>
+      <svg width="12" height="11" aria-hidden="true" key={i}>
         <use xlinkHref="#icon-star"></use>
       </svg>);
   }

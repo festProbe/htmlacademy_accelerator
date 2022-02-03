@@ -27,13 +27,13 @@ function Product(): JSX.Element {
   const stars = [];
   for (let i = 0; i < Math.round(rating); i++) {
     stars.push(
-      <svg width="12" height="11" aria-hidden="true" key={`${vendorCode} ${i}`}>
+      <svg width="12" height="11" aria-hidden="true" key={i}>
         <use xlinkHref="#icon-full-star"></use>
       </svg>);
   }
   for (let i = 5; i > Math.round(rating); i--) {
     stars.push(
-      <svg width="12" height="11" aria-hidden="true" key={`${vendorCode} ${id + 1}`}>
+      <svg width="12" height="11" aria-hidden="true" key={i}>
         <use xlinkHref="#icon-star"></use>
       </svg>);
   }
