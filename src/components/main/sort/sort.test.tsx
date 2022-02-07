@@ -11,7 +11,7 @@ import { ReducerState } from '../../../types/state';
 import { APIRoute } from '../../../utils/const';
 import { guitarsMock } from '../../../utils/mocks';
 import {initialState} from '../../../store/reducer';
-import Sort from "./sort";
+import Sort from './sort';
 
 const api = createAPI();
 const mockAPI = new MockAdapter(api);
@@ -26,7 +26,7 @@ mockAPI
 const fakeSort = (
   <Provider store={store}>
     <Router history={history}>
-      <Sort />
+      <Sort sortType='' sortOrder=''/>
     </Router>
   </Provider>
 );

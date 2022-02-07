@@ -1,19 +1,32 @@
-import { ChangeEvent, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setGuitarTypes, setMaxPrice, setMinPrice, setStringsCounts } from '../../../store/actions';
-import { fetchGuitarsAction } from '../../../store/api-actions';
-import { selectGuitarTypes, selectMaxPrice, selectMaxPriceForPlaceholder, selectMinPrice, selectMinPriceForPlaceholder, selectStringsCounts } from '../../../store/selectors';
+import {ChangeEvent, useEffect, useRef} from 'react';
+import {useDispatch} from 'react-redux';
+import {setCurrentPage, setGuitarTypes, setMaxPrice, setMinPrice, setStringsCounts} from '../../../store/actions';
+import {getMinMaxPricePlaceholder} from '../../../store/api-actions';
 
-function Filter(): JSX.Element {
+type FilterPropsType = {
+  minPriceFilter: string,
+  maxPriceFilter: string,
+  placeholderMin: number,
+  placeholderMax: number,
+  guitarTypes: (string | null)[],
+  stringsCounts: (string | null)[],
+};
+
+function Filter({
+  minPriceFilter,
+  maxPriceFilter,
+  placeholderMin,
+  placeholderMax,
+  guitarTypes,
+  stringsCounts}: FilterPropsType): JSX.Element {
   const dispatch = useDispatch();
   const minPrice = useRef<HTMLInputElement>(null);
   const maxPrice = useRef<HTMLInputElement>(null);
-  const minPriceFilter = useSelector(selectMinPrice);
-  const maxPriceFilter = useSelector(selectMaxPrice);
-  const placeholderMin = useSelector(selectMinPriceForPlaceholder);
-  const placeholderMax = useSelector(selectMaxPriceForPlaceholder);
-  const guitarTypes = useSelector(selectGuitarTypes);
-  const stringsCounts = useSelector(selectStringsCounts);
+
+
+  useEffect(() => {
+    dispatch(getMinMaxPricePlaceholder());
+  }, [guitarTypes, stringsCounts, dispatch]);
 
   const changeMinPriceHandler = () => {
     const number = /^([1-9]\d*)$/;
@@ -23,8 +36,13 @@ function Filter(): JSX.Element {
   };
 
   const blurMinPriceFieldHandler = () => {
-    dispatch(fetchGuitarsAction());
-    const min = Math.max(Number(minPrice.current?.value), placeholderMin).toString();
+    dispatch(setCurrentPage(1));
+    let min;
+    if (minPrice.current?.value !== '') {
+      min = Math.max(Number(minPrice.current?.value), placeholderMin).toString();
+    } else {
+      min = '';
+    }
     dispatch(setMinPrice(min));
   };
 
@@ -36,30 +54,52 @@ function Filter(): JSX.Element {
   };
 
   const blurMaxPriceFieldHandler = () => {
-    dispatch(fetchGuitarsAction());
+    dispatch(setCurrentPage(1));
     const max = Math.min(Number(minPrice.current?.value), placeholderMax).toString();
     dispatch(setMinPrice(max));
   };
 
   const changeGuitarTypeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
+    evt.preventDefault();
+    let newGuitarTypes: (string | null)[];
     if (guitarTypes.includes(evt.target.name)) {
       const index = guitarTypes.findIndex((guitarType) => guitarType === evt.target.name);
-      const newGuitarTypes = [...guitarTypes.slice(0, index), ...guitarTypes.slice(index + 1)];
+      newGuitarTypes = [...guitarTypes.slice(0, index), ...guitarTypes.slice(index + 1)];
       dispatch(setGuitarTypes(newGuitarTypes));
     } else {
-      if (evt.target.name === 'electric') {
-        const index = stringsCounts.findIndex((guitarType) => guitarType === '12');
-        dispatch(setStringsCounts([...stringsCounts.slice(0, index), ...stringsCounts.slice(index + 1)]));
-      } else if (evt.target.name === 'acoustic') {
-        const index = stringsCounts.findIndex((guitarType) => guitarType === '4');
-        dispatch(setStringsCounts([...stringsCounts.slice(0, index), ...stringsCounts.slice(index + 1)]));
-      }
-      dispatch(setGuitarTypes([...guitarTypes, evt.target.name]));
+      newGuitarTypes = [...guitarTypes, evt.target.name];
+      dispatch(setGuitarTypes(newGuitarTypes));
     }
-    dispatch(fetchGuitarsAction());
+    if (newGuitarTypes.length === 1) {
+      switch (newGuitarTypes[0]) {
+        case 'acoustic':
+          if (stringsCounts.includes('4')) {
+            const indx = stringsCounts.findIndex((stringsCount) => stringsCount === '4');
+            const newStringsCounts = [...stringsCounts.slice(0, indx), ...stringsCounts.slice(indx + 1)];
+            dispatch(setStringsCounts(newStringsCounts));
+          }
+          break;
+        case 'ukulele':
+          if (stringsCounts.includes('4')) {
+            dispatch(setStringsCounts(['4']));
+          }
+          else {
+            dispatch(setStringsCounts([]));
+          }
+      }
+    }
+    if ((newGuitarTypes.includes('electric') && newGuitarTypes.includes('ukulele')) || (newGuitarTypes.length === 1 && newGuitarTypes.includes('electric'))){
+      if (stringsCounts.includes('12')){
+        const indx = stringsCounts.findIndex((stringsCount) => stringsCount === '12');
+        const newStringsCounts = [...stringsCounts.slice(0, indx), ...stringsCounts.slice(indx + 1)];
+        dispatch(setStringsCounts(newStringsCounts));
+      }
+    }
+    dispatch(setCurrentPage(1));
   };
 
   const changeStringsCountsHandler = (evt: ChangeEvent<HTMLInputElement>) => {
+    evt.preventDefault();
     if (stringsCounts.includes(evt.target.value)) {
       const index = stringsCounts.findIndex((stringsCount) => stringsCount === evt.target.value);
       const newStringsCounts = [...stringsCounts.slice(0, index), ...stringsCounts.slice(index + 1)];
@@ -67,7 +107,7 @@ function Filter(): JSX.Element {
     } else {
       dispatch(setStringsCounts([...stringsCounts, evt.target.value]));
     }
-    dispatch(fetchGuitarsAction());
+    dispatch(setCurrentPage(1));
   };
 
   return (
@@ -113,6 +153,7 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="acoustic"
             name="acoustic"
+            checked={guitarTypes.includes('acoustic')}
             onChange={changeGuitarTypeHandler}
           />
           <label htmlFor="acoustic">Акустические гитары</label>
@@ -123,6 +164,7 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="electric"
             name="electric"
+            checked={guitarTypes.includes('electric')}
             onChange={changeGuitarTypeHandler}
           />
           <label htmlFor="electric">Электрогитары</label>
@@ -133,6 +175,7 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="ukulele"
             name="ukulele"
+            checked={guitarTypes.includes('ukulele')}
             onChange={changeGuitarTypeHandler}
           />
           <label htmlFor="ukulele">Укулеле</label>
@@ -148,6 +191,7 @@ function Filter(): JSX.Element {
             name="4-strings"
             value='4'
             onChange={changeStringsCountsHandler}
+            checked={stringsCounts.includes('4')}
             disabled={!guitarTypes.includes('ukulele') && !guitarTypes.includes('electric') && guitarTypes.length > 0}
           />
           <label htmlFor="4-strings">4</label>
@@ -161,6 +205,7 @@ function Filter(): JSX.Element {
             value='6'
             onChange={changeStringsCountsHandler}
             disabled={!guitarTypes.includes('electric') && !guitarTypes.includes('acoustic') && guitarTypes.length > 0}
+            checked={stringsCounts.includes('6')}
           />
           <label htmlFor="6-strings">6</label>
         </div>
@@ -173,6 +218,7 @@ function Filter(): JSX.Element {
             value='7'
             onChange={changeStringsCountsHandler}
             disabled={!guitarTypes.includes('electric') && !guitarTypes.includes('acoustic') && guitarTypes.length > 0}
+            checked={stringsCounts.includes('7')}
           />
           <label htmlFor="7-strings">7</label>
         </div>
@@ -185,6 +231,7 @@ function Filter(): JSX.Element {
             value='12'
             onChange={changeStringsCountsHandler}
             disabled={!guitarTypes.includes('acoustic') && guitarTypes.length > 0}
+            checked={stringsCounts.includes('12')}
           />
           <label htmlFor="12-strings">12</label>
         </div>

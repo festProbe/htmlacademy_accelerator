@@ -1,24 +1,12 @@
 import { ActionType } from '../types/actions';
 import { ReducerState } from '../types/state';
 import { commentsMock, guitarMock, guitarsMock, totalCountMock } from '../utils/mocks';
-import { reducer } from './reducer';
+import {initialState, reducer} from './reducer';
 
 let stateMock: ReducerState;
 
 beforeEach(() => {
-  stateMock = {
-    guitars: [],
-    guitar: null,
-    totalCount: 0,
-    comments: [],
-    currentPage: 1,
-    minPrice: '',
-    maxPrice: '',
-    sortType: '',
-    sortOrder: '',
-    guitarTypes: [],
-    stringsCounts: [],
-  };
+  stateMock = initialState;
 });
 
 describe('reducer test', () => {

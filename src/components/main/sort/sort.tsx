@@ -1,13 +1,14 @@
 import { MouseEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSortOrder, setSortType } from '../../../store/actions';
-import { fetchGuitarsAction } from '../../../store/api-actions';
-import { selectSortOrder, selectSortType } from '../../../store/selectors';
 
-function Sort(): JSX.Element {
+type SortPropsType = {
+  sortType: string,
+  sortOrder: string,
+}
+
+function Sort({sortType, sortOrder}: SortPropsType): JSX.Element {
   const dispatch = useDispatch();
-  const sortType = useSelector(selectSortType);
-  const sortOrder = useSelector(selectSortOrder);
 
   const FROM_LOW = 'asc';
   const FROM_HIGH = 'desc';
@@ -23,7 +24,7 @@ function Sort(): JSX.Element {
       document.querySelector('.catalog-sort__order-button--up')?.classList.add('catalog-sort__order-button--active');
     }
     evt.currentTarget.classList.add('catalog-sort__type-button--active');
-    dispatch(fetchGuitarsAction());
+    //dispatch(fetchGuitarsAction());
   };
 
   const sortOrderClickHandler = (evt: MouseEvent<HTMLButtonElement>) => {
@@ -34,7 +35,7 @@ function Sort(): JSX.Element {
       document.querySelector('.catalog-sort__type-button--price')?.classList.add('catalog-sort__type-button--active');
     }
     evt.currentTarget.classList.add('catalog-sort__order-button--active');
-    dispatch(fetchGuitarsAction());
+    //dispatch(fetchGuitarsAction());
   };
   return (
     <div className="catalog-sort">

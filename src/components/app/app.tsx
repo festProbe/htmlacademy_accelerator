@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Cart from '../cart/cart';
 import Product from '../product/product';
 import { AppRoute } from '../../utils/const';
+import NotFound from '../common/not-found/not-found';
 
 function App(): JSX.Element {
   return (
@@ -18,6 +19,9 @@ function App(): JSX.Element {
       </Route>
       <Route path={`${AppRoute.PRODUCT}/:id`} exact>
         <Product />
+      </Route>
+      <Route>
+        <NotFound/>
       </Route>
     </Switch>
   );

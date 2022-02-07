@@ -11,7 +11,7 @@ import { ReducerState } from '../../../types/state';
 import { APIRoute } from '../../../utils/const';
 import { guitarsMock } from '../../../utils/mocks';
 import {initialState} from '../../../store/reducer';
-import Filter from "./filter";
+import Filter from './filter';
 
 
 const api = createAPI();
@@ -27,7 +27,14 @@ mockAPI
 const fakeFilter = (
   <Provider store={store}>
     <Router history={history}>
-      <Filter />
+      <Filter
+        minPriceFilter=''
+        maxPriceFilter=''
+        placeholderMin={0}
+        placeholderMax={0}
+        guitarTypes={[]}
+        stringsCounts={[]}
+      />
     </Router>
   </Provider>
 );

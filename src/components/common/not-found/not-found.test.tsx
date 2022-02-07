@@ -1,7 +1,6 @@
 import {render, screen} from '@testing-library/react';
 import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
-import LoadingScreen from './loading-screen';
 import {createAPI} from '../../../api/api';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import {configureMockStore} from '@jedmao/redux-mock-store';
@@ -9,6 +8,7 @@ import {ReducerState} from '../../../types/state';
 import {Action} from '@reduxjs/toolkit';
 import {initialState} from '../../../store/reducer';
 import {Provider} from 'react-redux';
+import NotFound from '../not-found/not-found';
 
 const history = createMemoryHistory();
 const api = createAPI();
@@ -18,7 +18,7 @@ const store = mockStore(initialState);
 const fakeLoadingScreen = (
   <Provider store={store}>
     <Router history={history}>
-      <LoadingScreen/>
+      <NotFound/>
     </Router>
   </Provider>
 );
@@ -26,6 +26,6 @@ const fakeLoadingScreen = (
 describe('Component: LoadingScreen', () => {
   it('should render correctly', () => {
     render(fakeLoadingScreen);
-    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
+    expect(screen.getByText(/404 Not Found/i)).toBeInTheDocument();
   });
 });

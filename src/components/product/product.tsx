@@ -2,15 +2,17 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { fetchCommentsAction, fetchGuitarAction } from '../../store/api-actions';
-import { selectComments, selectGuitar } from '../../store/selectors';
+import {selectComments, selectGuitar, selectIsGuitarLoaded} from '../../store/selectors';
 import LoadingScreen from '../common/loading-screen/loading-screen';
 import MainLayout from '../common/main-layout/main-layout';
 import ReviewList from './review-list/review-list';
+import {GuitarType} from '../../types/data';
 
 function Product(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch();
   const guitar = useSelector(selectGuitar);
+  const isGuitarLoaded = useSelector(selectIsGuitarLoaded);
   const comments = useSelector(selectComments);
 
   useEffect(() => {
@@ -18,11 +20,11 @@ function Product(): JSX.Element {
     dispatch(fetchCommentsAction(id));
   }, [id, dispatch]);
 
-  if (!guitar) {
+  if (isGuitarLoaded === false) {
     return <LoadingScreen />;
   }
 
-  const { name, rating, previewImg, vendorCode, type, stringCount, description, price } = guitar;
+  const { name, rating, previewImg, vendorCode, type, stringCount, description, price } = guitar as GuitarType;
 
   const stars = [];
   for (let i = 0; i < Math.round(rating); i++) {

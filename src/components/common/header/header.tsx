@@ -1,7 +1,7 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import {FocusEvent, useEffect, useRef, useState, ChangeEvent} from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectGuitars } from '../../../store/selectors';
+import { selectAllGuitars } from '../../../store/selectors';
 import { GuitarType } from '../../../types/data';
 import { AppRoute } from '../../../utils/const';
 import logo from '../../../img/svg/logo.svg';
@@ -10,15 +10,30 @@ function Header(): JSX.Element {
   const [searchText, setSearchText] = useState('');
   const [filteredGuitars, setFilteredGuitars] = useState<GuitarType[] | null>(null);
   const searchValue = useRef(null);
-  const guitars = useSelector(selectGuitars);
+  const guitars = useSelector(selectAllGuitars);
 
   useEffect(() => {
     setFilteredGuitars(guitars.filter((guitar) => guitar.name.toLowerCase().includes(searchText.toLowerCase())));
   }, [guitars, searchText]);
 
 
+  const clickLinkHandler = () => {
+    setSearchText('');
+    document.querySelector('.form-search__select-list')?.classList.add('hidden');
+  };
+
   const changeTextHandler = (evt: ChangeEvent<HTMLInputElement>): void => {
-    setSearchText(evt.target.value);
+    setSearchText(evt.currentTarget.value);
+  };
+
+  const focusSearchHandler = () => {
+    document.querySelector('.form-search__select-list')?.classList.remove('hidden');
+  };
+
+  const blurSearchHandler = (evt: FocusEvent<HTMLDivElement>) => {
+    if (!evt.currentTarget.contains(evt.relatedTarget)){
+      document.querySelector('.form-search__select-list')?.classList.add('hidden');
+    }
   };
 
   return (
@@ -34,8 +49,8 @@ function Header(): JSX.Element {
             </li>
           </ul>
         </nav>
-        <div className="form-search">
-          <form className="form-search__form">
+        <div className="form-search"onFocus={focusSearchHandler} onBlur={blurSearchHandler}>
+          <form className="form-search__form" >
             <button className="form-search__submit" type="submit">
               <svg className="form-search__icon" width="14" height="15" aria-hidden="true">
                 <use xlinkHref="#icon-search"></use>
@@ -52,11 +67,11 @@ function Header(): JSX.Element {
             />
             <label className="visually-hidden" htmlFor="search">Поиск</label>
           </form>
-          <ul className={`form-search__select-list ${searchText === '' ? 'hidden' : ''}`} >
+          <ul className="form-search__select-list hidden">
             {
               filteredGuitars?.length !== undefined && filteredGuitars?.length > 0
                 ? filteredGuitars?.map((guitar) => (
-                  <Link to={`${AppRoute.PRODUCT}/${guitar.id}`} key={guitar.id} onClick={() => { setSearchText(''); }}>
+                  <Link to={`${AppRoute.PRODUCT}/${guitar.id}`} key={guitar.id} onClick={clickLinkHandler}>
                     <li
                       className="form-search__select-item"
                       tabIndex={0}
