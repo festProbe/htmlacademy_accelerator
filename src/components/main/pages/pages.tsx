@@ -44,7 +44,7 @@ function Pages(): JSX.Element {
           <li className="pagination__page pagination__page--prev" id="prev" onClick={handlePrevPageClick}>
             <Link
               className="link pagination__page-link"
-              to={currentPage !== 2 ? `${AppRoute.PAGE}${currentPage - 1}` : AppRoute.MAIN}
+              to={AppRoute.MAIN}
             >
               Назад
             </Link>
@@ -53,7 +53,7 @@ function Pages(): JSX.Element {
 
         {pageArr.map((page) => (
           <li className={`pagination__page ${page === currentPage ? 'pagination__page--active' : ''}`} key={page} onClick={handlePageClick}>
-            <Link className="link pagination__page-link" to={page !== 1 ? `${AppRoute.PAGE}${page}` : AppRoute.MAIN}>{page}</Link>
+            <Link className="link pagination__page-link" to={AppRoute.MAIN}>{page}</Link>
           </li>
         ))}
 
@@ -63,7 +63,7 @@ function Pages(): JSX.Element {
           <li className="pagination__page pagination__page--next" id="next" onClick={handleNextPageClick}>
             <Link
               className="link pagination__page-link"
-              to={`${AppRoute.PAGE}${currentPage + 1}`}
+              to={AppRoute.MAIN}
             >
               Далее
             </Link>

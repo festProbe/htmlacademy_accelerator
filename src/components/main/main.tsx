@@ -1,4 +1,4 @@
-import {Link, useHistory, useParams} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import MainLayout from '../common/main-layout/main-layout';
 import GuitarsList from './guitars-list/guitars-list';
 import Sort from './sort/sort';
@@ -30,7 +30,6 @@ import LoadingScreen from '../common/loading-screen/loading-screen';
 function Main(): JSX.Element {
   const dispatch = useDispatch();
   const history = useHistory();
-  const {page} = useParams<{ page: string }>();
   const guitars = useSelector(selectGuitars);
   const isGuitarsLoaded = useSelector(selectIsGuitarsLoaded);
   // Filters
@@ -67,27 +66,28 @@ function Main(): JSX.Element {
   });
 
   useEffect(() => {
-    const parsedURL: parsedUrlType = queryString.parse(history.location.search);
-    if (sortType && parsedURL._sort !== undefined) {
+    const search = history.location.search;
+    const parsedURL: parsedUrlType = queryString.parse(search);
+    if (parsedURL._sort !== undefined) {
       dispatch(setSortType(parsedURL._sort));
     }
-    if (page && !parsedURL.page) {
+    if (parsedURL.page !== undefined) {
       dispatch(setCurrentPage(Number(parsedURL.page)));
     }
-    if (minPriceFilter && parsedURL['price-gte'] !== undefined) {
+    if (parsedURL['price-gte'] !== undefined) {
       dispatch(setMinPrice(parsedURL['price-gte']));
     }
-    if (maxPriceFilter && parsedURL['price_lte'] !== undefined) {
+    if (parsedURL['price_lte'] !== undefined) {
       dispatch(setMaxPrice(parsedURL['price_lte']));
     }
-    if (guitarTypes.length === 0 && parsedURL.type !== undefined) {
+    if (parsedURL.type !== undefined) {
       let newGuitarTypes = parsedURL.type;
       if (typeof parsedURL.type === 'string') {
         newGuitarTypes = [parsedURL.type];
       }
       dispatch(setGuitarTypes(newGuitarTypes));
     }
-    if (stringsCounts.length === 0 && parsedURL.stringCount !== undefined) {
+    if (parsedURL.stringCount !== undefined) {
       let newStingsCount = parsedURL.stringCount;
       if (typeof parsedURL.stringCount === 'string') {
         newStingsCount = [parsedURL.stringCount];
@@ -95,7 +95,7 @@ function Main(): JSX.Element {
       dispatch(setStringsCounts(newStingsCount));
     }
     dispatch(fetchGuitarsAction());
-  }, []);
+  }, [dispatch, history.location.search]);
 
   useEffect(() => {
     setQuery({
