@@ -6,9 +6,9 @@ import { ReducerState } from '../types/state';
 import { Action } from 'redux';
 import { APIRoute } from '../utils/const';
 import {loadComments, loadGuitars, loadProductInfo, loadTotalCount} from './actions';
-import {fetchCommentsAction, fetchGuitarAction, fetchGuitarsAction} from './api-actions';
+import {fetchCommentsAction, fetchGuitarAction, fetchAllGuitarsAction} from './api-actions';
 import {commentsMock, guitarMock, guitarsMock, totalCountMock} from '../utils/mocks';
-import {initialState} from "./reducer";
+import {initialState} from './reducer';
 
 
 describe('Async actions', () => {
@@ -25,7 +25,7 @@ describe('Async actions', () => {
         'x-total-count': totalCountMock,
       });
 
-    await store.dispatch(fetchGuitarsAction());
+    await store.dispatch(fetchAllGuitarsAction());
 
     expect(store.getActions()).toEqual([
       loadGuitars(guitarsMock),
