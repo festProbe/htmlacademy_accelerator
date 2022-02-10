@@ -1,14 +1,14 @@
-import {render, screen} from "@testing-library/react";
-import {Router} from "react-router-dom";
-import {createMemoryHistory} from "history";
-import {createAPI} from "../../../api/api";
-import thunk, {ThunkDispatch} from "redux-thunk";
-import {configureMockStore} from "@jedmao/redux-mock-store";
-import {ReducerState} from "../../../types/state";
-import {Action} from "@reduxjs/toolkit";
-import {initialState} from "../../../store/reducer";
-import {Provider} from "react-redux";
-import Pages from "./pages";
+import {render, screen} from '@testing-library/react';
+import {Router} from 'react-router-dom';
+import {createMemoryHistory} from 'history';
+import {createAPI} from '../../../api/api';
+import thunk, {ThunkDispatch} from 'redux-thunk';
+import {configureMockStore} from '@jedmao/redux-mock-store';
+import {ReducerState} from '../../../types/state';
+import {Action} from '@reduxjs/toolkit';
+import {initialState} from '../../../store/reducer';
+import {Provider} from 'react-redux';
+import Pages from './pages';
 
 const history = createMemoryHistory();
 const api = createAPI();
@@ -21,10 +21,10 @@ describe('Component: Pages', () => {
     const fakePages = (
       <Provider store={store}>
         <Router history={history}>
-          <Pages />
+          <Pages setQueryParams={jest.fn}/>
         </Router>
       </Provider>
-    )
+    );
     render(fakePages);
     expect(screen.getByText(/Далее/i)).toBeInTheDocument();
   });

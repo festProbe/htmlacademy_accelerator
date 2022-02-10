@@ -1,14 +1,25 @@
-import { MouseEvent } from 'react';
-import { useDispatch } from 'react-redux';
+import {MouseEvent, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import { setSortOrder, setSortType } from '../../../store/actions';
+import {SetQuery} from 'use-query-params';
+import {Params} from '../../../types/params';
+import {selectSortOrder, selectSortType} from '../../../store/selectors';
 
 type SortPropsType = {
-  sortType: string,
-  sortOrder: string,
+  setQueryParams: SetQuery<Params>,
 }
 
-function Sort({sortType, sortOrder}: SortPropsType): JSX.Element {
+function Sort({setQueryParams}: SortPropsType): JSX.Element {
   const dispatch = useDispatch();
+  const sortType = useSelector(selectSortType);
+  const sortOrder = useSelector(selectSortOrder);
+
+  useEffect(() => {
+    setQueryParams({
+      _sort: sortType ? sortType : undefined,
+      _order: sortOrder ? sortOrder : undefined,
+    }, 'pushIn');
+  }, [sortType, sortOrder, setQueryParams]);
 
   const FROM_LOW = 'asc';
   const FROM_HIGH = 'desc';

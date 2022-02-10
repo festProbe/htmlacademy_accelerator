@@ -49,7 +49,7 @@ function Header(): JSX.Element {
             </li>
           </ul>
         </nav>
-        <div className="form-search"onFocus={focusSearchHandler} onBlur={blurSearchHandler}>
+        <div className="form-search" onFocus={focusSearchHandler} onBlur={blurSearchHandler}>
           <form className="form-search__form" >
             <button className="form-search__submit" type="submit">
               <svg className="form-search__icon" width="14" height="15" aria-hidden="true">
@@ -74,14 +74,13 @@ function Header(): JSX.Element {
                   <Link to={`${AppRoute.PRODUCT}/${guitar.id}`} key={guitar.id} onClick={clickLinkHandler}>
                     <li
                       className="form-search__select-item"
-                      tabIndex={0}
                       key={guitar.id}
                     >
                       {guitar.name}
                     </li>
                   </Link>
                 ))
-                : <li className="form-search__select-item" tabIndex={0} key={0}>К сожалению у нас нет гитар с таким названием.</li>
+                : <li className="form-search__select-item" key={0}>К сожалению у нас нет гитар с таким названием.</li>
             }
           </ul>
         </div>

@@ -1,16 +1,28 @@
-import { MouseEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { setCurrentPage } from '../../../store/actions';
-import { fetchGuitarsAction } from '../../../store/api-actions';
-import { selectCurrentPage, selectGuitarsCount } from '../../../store/selectors';
-import { AppRoute, MAX_GUITARS_ON_PAGE } from '../../../utils/const';
+import {MouseEvent, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link} from 'react-router-dom';
+import {setCurrentPage} from '../../../store/actions';
+import {fetchGuitarsAction} from '../../../store/api-actions';
+import {selectCurrentPage, selectGuitarsCount} from '../../../store/selectors';
+import {AppRoute, MAX_GUITARS_ON_PAGE} from '../../../utils/const';
+import {SetQuery} from 'use-query-params';
+import {Params} from '../../../types/params';
 
-function Pages(): JSX.Element {
+type PagesProps = {
+  setQueryParams: SetQuery<Params>,
+}
+
+function Pages({setQueryParams}: PagesProps): JSX.Element {
   const dispatch = useDispatch();
   const guitarsCount = useSelector(selectGuitarsCount);
   const pageCount = Math.ceil(guitarsCount / MAX_GUITARS_ON_PAGE);
   const currentPage = useSelector(selectCurrentPage);
+
+  useEffect(() => {
+    setQueryParams({
+      page: currentPage > 1 ? currentPage : undefined,
+    }, 'pushIn');
+  }, [setQueryParams, currentPage, dispatch]);
 
   const pageArr = [];
   for (let i = 1; i <= pageCount; i++) {
@@ -35,6 +47,10 @@ function Pages(): JSX.Element {
     dispatch(fetchGuitarsAction());
   };
 
+  if (Number(guitarsCount) === 0){
+    return <div></div>;
+  }
+
   return (
     <div className="pagination page-content__pagination">
       <ul className="pagination__list">
@@ -49,14 +65,11 @@ function Pages(): JSX.Element {
               Назад
             </Link>
           </li>}
-
-
         {pageArr.map((page) => (
           <li className={`pagination__page ${page === currentPage ? 'pagination__page--active' : ''}`} key={page} onClick={handlePageClick}>
             <Link className="link pagination__page-link" to={AppRoute.MAIN}>{page}</Link>
           </li>
         ))}
-
         {currentPage === pageCount
           ? ''
           :
@@ -68,7 +81,6 @@ function Pages(): JSX.Element {
               Далее
             </Link>
           </li>}
-
       </ul>
     </div>
   );

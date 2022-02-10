@@ -6,13 +6,12 @@ import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import thunk, { ThunkDispatch } from 'redux-thunk';
-import { createAPI } from '../../../api/api';
-import { ReducerState } from '../../../types/state';
-import { APIRoute } from '../../../utils/const';
-import { guitarsMock } from '../../../utils/mocks';
-import {initialState} from '../../../store/reducer';
-import Filter from './filter';
-
+import { createAPI } from '../../../../api/api';
+import { ReducerState } from '../../../../types/state';
+import { APIRoute } from '../../../../utils/const';
+import { guitarsMock } from '../../../../utils/mocks';
+import {initialState} from '../../../../store/reducer';
+import StringsCount from './strings-count';
 
 const api = createAPI();
 const mockAPI = new MockAdapter(api);
@@ -24,20 +23,18 @@ mockAPI
   .onGet(`${APIRoute.GUITARS}?_start=0&_end=9&_limit=9`)
   .reply(200, guitarsMock);
 
-const fakeFilter = (
+const fakeStringsCount = (
   <Provider store={store}>
     <Router history={history}>
-      <Filter setQueryParams={jest.fn}/>
+      <StringsCount setQueryParams={jest.fn}/>
     </Router>
   </Provider>
 );
 
-describe('Component: Filter', () => {
+describe('Component: StringsCount', () => {
   it('should render correctly', () => {
 
-    render(fakeFilter);
-    expect(screen.getByText(/Минимальная цена/i)).toBeInTheDocument();
-    expect(screen.getByText(/Максимальная цена/i)).toBeInTheDocument();
-    expect(screen.getByText(/Акустические гитары/i)).toBeInTheDocument();
+    render(fakeStringsCount);
+    expect(screen.getByText(/Количество струн/i)).toBeInTheDocument();
   });
 });

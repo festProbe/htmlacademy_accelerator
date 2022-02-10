@@ -6,13 +6,12 @@ import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import thunk, { ThunkDispatch } from 'redux-thunk';
-import { createAPI } from '../../../api/api';
-import { ReducerState } from '../../../types/state';
-import { APIRoute } from '../../../utils/const';
-import { guitarsMock } from '../../../utils/mocks';
-import {initialState} from '../../../store/reducer';
-import Filter from './filter';
-
+import { createAPI } from '../../../../api/api';
+import { ReducerState } from '../../../../types/state';
+import { APIRoute } from '../../../../utils/const';
+import { guitarsMock } from '../../../../utils/mocks';
+import {initialState} from '../../../../store/reducer';
+import PriceRange from './price-range';
 
 const api = createAPI();
 const mockAPI = new MockAdapter(api);
@@ -24,20 +23,19 @@ mockAPI
   .onGet(`${APIRoute.GUITARS}?_start=0&_end=9&_limit=9`)
   .reply(200, guitarsMock);
 
-const fakeFilter = (
+const fakePriceRange = (
   <Provider store={store}>
     <Router history={history}>
-      <Filter setQueryParams={jest.fn}/>
+      <PriceRange setQueryParams={jest.fn}/>
     </Router>
   </Provider>
 );
 
-describe('Component: Filter', () => {
+describe('Component: PriceRange', () => {
   it('should render correctly', () => {
 
-    render(fakeFilter);
+    render(fakePriceRange);
     expect(screen.getByText(/Минимальная цена/i)).toBeInTheDocument();
     expect(screen.getByText(/Максимальная цена/i)).toBeInTheDocument();
-    expect(screen.getByText(/Акустические гитары/i)).toBeInTheDocument();
   });
 });

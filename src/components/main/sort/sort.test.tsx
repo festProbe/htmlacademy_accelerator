@@ -26,7 +26,7 @@ mockAPI
 const fakeSort = (
   <Provider store={store}>
     <Router history={history}>
-      <Sort sortType='' sortOrder=''/>
+      <Sort setQueryParams={jest.fn} />
     </Router>
   </Provider>
 );
