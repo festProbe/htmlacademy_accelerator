@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
-import { CommentType, GuitarType } from '../types/data';
+import {AllCommments, GuitarType} from '../types/data';
 
 export const loadAllGuitars = createAction<GuitarType[]>(ActionType.LoadAllGuitars);
 export const loadGuitars = createAction<GuitarType[]>(ActionType.LoadGuitars);
@@ -8,7 +8,7 @@ export const setIsGuitarsLoaded = createAction<boolean>(ActionType.SetIsGuitarsL
 export const loadProductInfo = createAction<GuitarType>(ActionType.LoadProductInfo);
 export const setIsGuitarLoaded = createAction<boolean>(ActionType.SetIsGuitarLoaded);
 export const loadTotalCount = createAction<number>(ActionType.LoadTotalCount);
-export const loadComments = createAction<CommentType[]>(ActionType.LoadComments);
+export const loadComments = createAction<AllCommments>(ActionType.LoadComments);
 export const setCurrentPage = createAction<number>(ActionType.SetCurrentPage);
 export const setMinPrice = createAction<string>(ActionType.SetMinPrice);
 export const setMaxPrice = createAction<string>(ActionType.SetMaxPrice);
@@ -18,3 +18,4 @@ export const setSortType = createAction<string>(ActionType.SetSortType);
 export const setSortOrder = createAction<string>(ActionType.SetSortOrder);
 export const setGuitarTypes = createAction<(string | null)[]>(ActionType.SetGuitarTypes);
 export const setStringsCounts = createAction<(string | null)[]>(ActionType.SetStringsCounts);
+export const setProductTab = createAction<string>(ActionType.SetProductTab);

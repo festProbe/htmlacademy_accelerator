@@ -4,10 +4,12 @@ import { AppRoute } from '../../../utils/const';
 
 type CardProps = {
   guitar: GuitarType
+  commentsCount: number,
 }
 
-function Card({ guitar }: CardProps): JSX.Element {
+function Card({ guitar, commentsCount }: CardProps): JSX.Element {
   const { previewImg, name, id, rating, price } = guitar;
+
   const stars = [];
   for (let i = 0; i < Math.round(rating); i++) {
     stars.push(
@@ -26,7 +28,7 @@ function Card({ guitar }: CardProps): JSX.Element {
       <div className="product-card__info">
         <div className="rate product-card__rate" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
           {stars}
-          <span className="rate__count">9</span><span className="rate__message"></span>
+          <span className="rate__count">{commentsCount}</span><span className="rate__message"></span>
         </div>
         <p className="product-card__title">{name}</p>
         <p className="product-card__price"><span className="visually-hidden">Цена:</span>{price} ₽

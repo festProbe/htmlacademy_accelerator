@@ -20,6 +20,7 @@ export enum ActionType {
   SetStringsCounts = 'main/filter/setStringsCounts',
   SetSortType = 'main/sort/setSortType',
   SetSortOrder = 'main/sort/setSortOrder',
+  SetProductTab = 'product/setProductTab',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, ReducerState, AxiosInstance, Action>;

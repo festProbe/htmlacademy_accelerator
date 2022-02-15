@@ -8,7 +8,9 @@ import {
   loadTotalCount,
   setMinPricePlaceholder,
   setMaxPricePlaceholder,
-  loadAllGuitars, setIsGuitarsLoaded, setIsGuitarLoaded
+  loadAllGuitars,
+  setIsGuitarsLoaded,
+  setIsGuitarLoaded
 } from './actions';
 import { toast } from 'react-toastify';
 
@@ -17,6 +19,7 @@ export const fetchAllGuitarsAction = (): ThunkActionResult =>
     try {
       const response = await api.get<GuitarType[]>(APIRoute.GUITARS);
       dispatch(loadAllGuitars(response.data));
+      response.data.forEach((guitar) => dispatch(fetchCommentsAction(guitar.id.toString())));
     }
     catch {
       toast.error('Ошибка при загрузке объявлений.');
@@ -77,8 +80,12 @@ export const fetchGuitarAction = (id: string): ThunkActionResult =>
 export const fetchCommentsAction = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const { data } = await api.get<CommentType[]>(`${APIRoute.GUITARS}/${id}/${APIRoute.COMMENTS}`);
-      dispatch(loadComments(data));
+      const { data } = await api.get<CommentType[]>(`${APIRoute.GUITARS}/${id}${APIRoute.COMMENTS}`);
+      const comments = {
+        id: id,
+        comments: data,
+      };
+      dispatch(loadComments(comments));
     }
     catch {
       toast.error('Ошибка при загрузке комментариев');

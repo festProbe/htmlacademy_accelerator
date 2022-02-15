@@ -16,7 +16,9 @@ import {
   setSortType,
   setSortOrder,
   setGuitarTypes,
-  setStringsCounts} from './actions';
+  setStringsCounts,
+  setProductTab
+} from './actions';
 
 const initialState: ReducerState = {
   allGuitars: [],
@@ -25,7 +27,7 @@ const initialState: ReducerState = {
   guitar: null,
   isGuitarLoaded: false,
   totalCount: 0,
-  comments: [],
+  allCommments: [],
   currentPage: 1,
   minPrice: '',
   maxPrice: '',
@@ -35,6 +37,7 @@ const initialState: ReducerState = {
   sortOrder: '',
   guitarTypes: [],
   stringsCounts: [],
+  productTab: 'characteristics',
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -58,7 +61,7 @@ const reducer = createReducer(initialState, (builder) => {
       state.totalCount = action.payload;
     })
     .addCase(loadComments, (state, action) => {
-      state.comments = action.payload;
+      state.allCommments.push(action.payload);
     })
     .addCase(setCurrentPage, (state, action) => {
       state.currentPage = action.payload;
@@ -86,6 +89,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setStringsCounts, (state, action) => {
       state.stringsCounts = action.payload;
+    })
+    .addCase(setProductTab, (state, action) => {
+      state.productTab = action.payload;
     });
 });
 

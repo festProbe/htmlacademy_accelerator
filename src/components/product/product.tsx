@@ -1,22 +1,23 @@
-import {useEffect} from 'react';
+import {MouseEvent, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
-import {fetchCommentsAction, fetchGuitarAction} from '../../store/api-actions';
-import {selectComments, selectGuitar, selectIsGuitarLoaded} from '../../store/selectors';
+import {fetchGuitarAction} from '../../store/api-actions';
+import {selectComments, selectGuitar, selectIsGuitarLoaded, selectProductTab} from '../../store/selectors';
 import LoadingScreen from '../common/loading-screen/loading-screen';
 import MainLayout from '../common/main-layout/main-layout';
 import ReviewList from './review-list/review-list';
+import {setProductTab} from '../../store/actions';
 
 function Product(): JSX.Element {
   const {id} = useParams<{ id: string }>();
   const dispatch = useDispatch();
   const guitar = useSelector(selectGuitar);
   const isGuitarLoaded = useSelector(selectIsGuitarLoaded);
-  const comments = useSelector(selectComments);
+  const comments = useSelector(selectComments).filter((comment) => comment.id === id)[0]?.comments;
+  const productTab = useSelector(selectProductTab);
 
   useEffect(() => {
     dispatch(fetchGuitarAction(id));
-    dispatch(fetchCommentsAction(id));
   }, [id, dispatch]);
 
   if (!guitar || !isGuitarLoaded) {
@@ -55,17 +56,35 @@ function Product(): JSX.Element {
       </svg>);
   }
 
+  const clickProductTabHandler = (evt:MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    dispatch(setProductTab(evt.currentTarget.value));
+  };
+
+  const getRuGuitarType = (guitarType: string): string => {
+    switch (guitarType) {
+      case 'acoustic':
+        return 'Акустическая гитара';
+      case 'electric':
+        return 'Электрогитара';
+      case 'ukulele':
+        return 'Укулеле';
+      default:
+        return guitarType;
+    }
+  };
+
   return (
     <MainLayout>
       <main className="page-content">
         <div className="container">
-          <h1 className="page-content__title title title--bigger">Товар</h1>
+          <h1 className="page-content__title title title--bigger">{name}</h1>
           <ul className="breadcrumbs page-content__breadcrumbs">
             <li className="breadcrumbs__item"><Link className="link" to="/">Главная</Link>
             </li>
             <li className="breadcrumbs__item"><Link className="link" to="/">Каталог</Link>
             </li>
-            <li className="breadcrumbs__item"><Link className="link" to="/">Товар</Link>
+            <li className="breadcrumbs__item"><Link className="link" to="/">{name}</Link>
             </li>
           </ul>
           <div className="product-container">
@@ -81,13 +100,25 @@ function Product(): JSX.Element {
               <div className="rate product-container__rating" aria-hidden="true">
                 <span className="visually-hidden">Рейтинг:</span>
                 {stars}
-                <span className="rate__count"></span><span className="rate__message"></span>
+                <span className="rate__count">{comments.length}</span><span className="rate__message"></span>
               </div>
               <div className="tabs">
-                <Link className="button button--medium tabs__button" to="/characteristics">Характеристики</Link>
-                <Link className="button button--black-border button--medium tabs__button" to="/">Описание</Link>
+                <button
+                  className={`button button--medium tabs__button ${productTab === 'characteristics' ? '' : 'button button--black-border'}`}
+                  value="characteristics"
+                  onClick={clickProductTabHandler}
+                >
+                  Характеристики
+                </button>
+                <button
+                  className={`button button--medium tabs__button ${productTab === 'description' ? '' : 'button button--black-border'}`}
+                  value="description"
+                  onClick={clickProductTabHandler}
+                >
+                  Описание
+                </button>
                 <div className="tabs__content" id="characteristics">
-                  <table className="tabs__table">
+                  <table className={`${productTab === 'characteristics' ? '' : 'hidden'} tabs__table`}>
                     <tbody>
                       <tr className="tabs__table-row">
                         <td className="tabs__title">Артикул:</td>
@@ -95,7 +126,7 @@ function Product(): JSX.Element {
                       </tr>
                       <tr className="tabs__table-row">
                         <td className="tabs__title">Тип:</td>
-                        <td className="tabs__value">{type}</td>
+                        <td className="tabs__value">{getRuGuitarType(type)}</td>
                       </tr>
                       <tr className="tabs__table-row">
                         <td className="tabs__title">Количество струн:</td>
@@ -103,7 +134,7 @@ function Product(): JSX.Element {
                       </tr>
                     </tbody>
                   </table>
-                  <p className="tabs__product-description hidden">{description}</p>
+                  <p className={`${productTab === 'description' ? '' : 'hidden'} tabs__product-description`}>{description}</p>
                 </div>
               </div>
             </div>
