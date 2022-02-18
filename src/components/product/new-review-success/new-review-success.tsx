@@ -28,7 +28,7 @@ function NewReviewSuccess({ setIsSuccessModalOpened }: NewReviewSuccessPropsType
     <div style={modalSuccessStyle}>
       <div className="modal is-active modal--success modal-for-ui-kit">
         <div className="modal__wrapper">
-          <div className="modal__overlay" data-close-modal ></div>
+          <div className="modal__overlay" data-close-modal></div>
           <div className="modal__content" ref={newReviewSuccessModalRef}>
             <svg className="modal__icon" width="26" height="20" aria-hidden="true">
               <use xlinkHref="#icon-success"></use>
