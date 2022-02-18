@@ -1,22 +1,39 @@
-import {Link} from 'react-router-dom';
-import {CommentType} from '../../../types/data';
+import { Link } from 'react-router-dom';
+import { CommentType } from '../../../types/data';
 import ReviewItem from '../review-item/review-item';
-import {MouseEvent, useEffect, useState} from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
+import NewReview from '../new-review/new-review';
+import NewReviewSuccess from '../new-review-success/new-review-success';
+import dayjs from 'dayjs';
 
 type ReviewListProps = {
   comments: CommentType[];
 }
 
-function ReviewList({comments}: ReviewListProps): JSX.Element {
+function ReviewList({ comments }: ReviewListProps): JSX.Element {
   const COMMENTS_COUNT_PER_STEP = 3;
   const [showedCommentCount, setShowedCommentCount] = useState<number>(COMMENTS_COUNT_PER_STEP);
   const [showedComments, setShowedComments] = useState<CommentType[]>([]);
+  const [isModalOpened, setIsModalOpened] = useState(false);
+  const [isSuccessModalOpened, setIsSuccessModalOpened] = useState(false);
 
   useEffect(() => {
-    const commentsCopy = comments.slice();
+    if (!isModalOpened) {
+      window.removeEventListener('keydown', closeNewReviewModal);
+    }
+  }, [isModalOpened]);
+
+  useEffect(() => {
+    if (!isSuccessModalOpened) {
+      window.removeEventListener('keydown', closeNewReviewModal);
+    }
+  }, [isSuccessModalOpened]);
+
+  useEffect(() => {
+    const commentsCopy = comments.slice().sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
     const commentCount = comments.length;
     const newShowCommentCount = Math.min(commentCount, showedCommentCount);
-    setShowedComments (commentsCopy.slice(0, newShowCommentCount));
+    setShowedComments(commentsCopy.slice(0, newShowCommentCount));
   }, [comments, showedCommentCount]);
 
   const clickShowMoreHandler = (evt: MouseEvent<HTMLButtonElement>) => {
@@ -24,11 +41,37 @@ function ReviewList({comments}: ReviewListProps): JSX.Element {
     setShowedCommentCount(showedCommentCount + COMMENTS_COUNT_PER_STEP);
   };
 
+  const clickAnchorButtonHandler = (evt: MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    const header = document.querySelector('#header');
+    header?.scrollIntoView({
+      block: 'start',
+      inline: 'nearest',
+      behavior: 'smooth',
+    });
+  };
+
+  const closeNewReviewModal = (evt: KeyboardEvent) => {
+    if (evt.key === 'Esc' || evt.key === 'Escape') {
+      document.body.style.overflow = '';
+      setIsModalOpened(false);
+    }
+  };
+
+  const clickAddNewReviewHandler = (evt: MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    document.body.style.overflow = 'hidden';
+    setIsModalOpened(true);
+    window.addEventListener('keydown', closeNewReviewModal);
+  };
+
   return (
     <section className="reviews">
       <h3 className="reviews__title title title--bigger">Отзывы</h3>
       <Link
-        className="button button--red-border button--big reviews__sumbit-button" to="/"
+        className="button button--red-border button--big reviews__sumbit-button"
+        to="/"
+        onClick={clickAddNewReviewHandler}
       >
         Оставить отзыв
       </Link>
@@ -46,7 +89,15 @@ function ReviewList({comments}: ReviewListProps): JSX.Element {
         >
           Показать еще отзывы
         </button> : ''}
-      <Link className="button button--up button--red-border button--big reviews__up-button" to="/">Наверх</Link>
+      <Link
+        className="button button--up button--red-border button--big reviews__up-button"
+        onClick={clickAnchorButtonHandler}
+        to="/"
+      >
+        Наверх
+      </Link>
+      {isModalOpened ? <NewReview setIsModalOpened={setIsModalOpened} setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
+      {isSuccessModalOpened ? <NewReviewSuccess setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
     </section>
   );
 }

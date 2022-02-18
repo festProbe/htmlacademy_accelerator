@@ -20,7 +20,7 @@ function Product(): JSX.Element {
     dispatch(fetchGuitarAction(id));
   }, [id, dispatch]);
 
-  if (!guitar || !isGuitarLoaded) {
+  if (!guitar || !isGuitarLoaded || !comments) {
     return (
       <MainLayout>
         <main className="page-content">

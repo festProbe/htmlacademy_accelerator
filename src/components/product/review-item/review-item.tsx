@@ -1,4 +1,6 @@
 import { CommentType } from '../../../types/data';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
 
 type ReviewItemProps = {
   comment: CommentType;
@@ -25,7 +27,7 @@ function ReviewItem({ comment }: ReviewItemProps): JSX.Element {
   return (
     <div className="review">
       <div className="review__wrapper">
-        <h4 className="review__title review__title--author title title--lesser">{userName}</h4><span className="review__date">{createAt}</span>
+        <h4 className="review__title review__title--author title title--lesser">{userName}</h4><span className="review__date">{dayjs(createAt).locale('ru').format('D MMMM')}</span>
       </div>
       <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
         {stars}
