@@ -1,4 +1,4 @@
-import {AllCommments, GuitarType} from '../types/data';
+import {AllComments, GuitarType} from '../types/data';
 import { ReducerState } from '../types/state';
 
 export const selectAllGuitars = (state: ReducerState): GuitarType[] => state.allGuitars;
@@ -14,7 +14,7 @@ export const selectStringsCounts = (state: ReducerState): (string | null)[] => s
 export const selectGuitarsCount = (state: ReducerState): number => state.totalCount;
 export const selectCurrentPage = (state: ReducerState): number => state.currentPage;
 export const selectGuitar = (state: ReducerState): GuitarType | null => state.guitar;
-export const selectComments = (state: ReducerState):AllCommments[] => state.allComments;
+export const selectComments = (state: ReducerState):AllComments[] => state.allComments;
 export const selectIsGuitarsLoaded = (state:ReducerState):boolean => state.isGuitarsLoaded;
 export const selectIsGuitarLoaded = (state:ReducerState):boolean => state.isGuitarLoaded;
 export const selectProductTab = (state:ReducerState):string => state.productTab;

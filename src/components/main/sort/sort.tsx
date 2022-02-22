@@ -35,7 +35,6 @@ function Sort({setQueryParams}: SortPropsType): JSX.Element {
       document.querySelector('.catalog-sort__order-button--up')?.classList.add('catalog-sort__order-button--active');
     }
     evt.currentTarget.classList.add('catalog-sort__type-button--active');
-    //dispatch(fetchGuitarsAction());
   };
 
   const sortOrderClickHandler = (evt: MouseEvent<HTMLButtonElement>) => {
@@ -46,7 +45,6 @@ function Sort({setQueryParams}: SortPropsType): JSX.Element {
       document.querySelector('.catalog-sort__type-button--price')?.classList.add('catalog-sort__type-button--active');
     }
     evt.currentTarget.classList.add('catalog-sort__order-button--active');
-    //dispatch(fetchGuitarsAction());
   };
   return (
     <div className="catalog-sort">

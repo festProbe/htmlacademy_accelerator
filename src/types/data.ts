@@ -21,7 +21,7 @@ export type CommentType = {
   guitarId: number
 }
 
-export type AllCommments = {
+export type AllComments = {
   id: string,
   comments: CommentType[],
 }
