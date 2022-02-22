@@ -7,7 +7,7 @@ export type ReducerState = {
   guitar: GuitarType | null,
   isGuitarLoaded: boolean,
   totalCount: number,
-  allCommments: AllCommments[],
+  allComments: AllCommments[],
   currentPage: number,
   minPrice: string,
   maxPrice: string,

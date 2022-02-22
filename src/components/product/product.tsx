@@ -13,7 +13,7 @@ function Product(): JSX.Element {
   const dispatch = useDispatch();
   const guitar = useSelector(selectGuitar);
   const isGuitarLoaded = useSelector(selectIsGuitarLoaded);
-  const comments = useSelector(selectComments).filter((comment) => comment.id === id)[0]?.comments;
+  const comments = useSelector(selectComments).filter((comment) => comment.id === guitar?.id.toString())[0]?.comments;
   const productTab = useSelector(selectProductTab);
 
   useEffect(() => {

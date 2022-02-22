@@ -1,18 +1,18 @@
-import { configureMockStore } from '@jedmao/redux-mock-store';
-import { Action } from '@reduxjs/toolkit';
-import { render, screen } from '@testing-library/react';
+import {configureMockStore} from '@jedmao/redux-mock-store';
+import {Action} from '@reduxjs/toolkit';
+import {render, screen} from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
-import { createMemoryHistory } from 'history';
-import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
-import thunk, { ThunkDispatch } from 'redux-thunk';
-import { createAPI } from '../../api/api';
-import { ReducerState } from '../../types/state';
-import { APIRoute } from '../../utils/const';
-import { guitarsMock } from '../../utils/mocks';
+import {createMemoryHistory} from 'history';
+import {Provider} from 'react-redux';
+import {Route, Router} from 'react-router-dom';
+import thunk, {ThunkDispatch} from 'redux-thunk';
+import {createAPI} from '../../api/api';
+import {ReducerState} from '../../types/state';
+import {APIRoute} from '../../utils/const';
+import {guitarsMock} from '../../utils/mocks';
 import {initialState} from '../../store/reducer';
-import Main from "./main";
-
+import Main from './main';
+import { QueryParamProvider } from 'use-query-params';
 
 const api = createAPI();
 const mockAPI = new MockAdapter(api);
@@ -27,7 +27,9 @@ mockAPI
 const fakeMain = (
   <Provider store={store}>
     <Router history={history}>
-      <Main />
+      <QueryParamProvider ReactRouterRoute={Route}>
+        <Main/>
+      </QueryParamProvider>
     </Router>
   </Provider>
 );

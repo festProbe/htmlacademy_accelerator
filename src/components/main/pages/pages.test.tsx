@@ -14,10 +14,10 @@ const history = createMemoryHistory();
 const api = createAPI();
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore<ReducerState, Action, ThunkDispatch<ReducerState, typeof api, Action>>(middlewares);
-const store = mockStore(initialState);
 
 describe('Component: Pages', () => {
   it('should render correctly', () => {
+    const store = mockStore({...initialState, totalCount: 27});
     const fakePages = (
       <Provider store={store}>
         <Router history={history}>
@@ -26,6 +26,18 @@ describe('Component: Pages', () => {
       </Provider>
     );
     render(fakePages);
-    expect(screen.getByText(/Далее/i)).toBeInTheDocument();
+    expect(screen.getByTestId('pagination-list')).toBeInTheDocument();
+  });
+  it('should be empty when guitars count equal 0', () => {
+    const store = mockStore({...initialState, totalCount: 0});
+    const fakePages = (
+      <Provider store={store}>
+        <Router history={history}>
+          <Pages setQueryParams={jest.fn}/>
+        </Router>
+      </Provider>
+    );
+    render(fakePages);
+    expect(screen.getByTestId('pagination-empty')).toBeInTheDocument();
   });
 });

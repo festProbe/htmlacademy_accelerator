@@ -27,7 +27,7 @@ const initialState: ReducerState = {
   guitar: null,
   isGuitarLoaded: false,
   totalCount: 0,
-  allCommments: [],
+  allComments: [],
   currentPage: 1,
   minPrice: '',
   maxPrice: '',
@@ -61,7 +61,7 @@ const reducer = createReducer(initialState, (builder) => {
       state.totalCount = action.payload;
     })
     .addCase(loadComments, (state, action) => {
-      state.allCommments.push(action.payload);
+      state.allComments.push(action.payload);
     })
     .addCase(setCurrentPage, (state, action) => {
       state.currentPage = action.payload;

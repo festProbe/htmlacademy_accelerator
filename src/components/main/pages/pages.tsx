@@ -48,12 +48,12 @@ function Pages({setQueryParams}: PagesProps): JSX.Element {
   };
 
   if (Number(guitarsCount) === 0){
-    return <div></div>;
+    return <div data-testid="pagination-empty"></div>;
   }
 
   return (
     <div className="pagination page-content__pagination">
-      <ul className="pagination__list">
+      <ul className="pagination__list" data-testid="pagination-list">
         {currentPage === 1
           ? ''
           :

@@ -37,7 +37,7 @@ export const guitarsMock: GuitarType[] = [
 ];
 
 export const guitarMock: GuitarType = {
-  id: 1,
+  id: 0,
   name: 'guitar2',
   vendorCode: 'wef324g3g3',
   type: 'ukulele',
@@ -54,8 +54,8 @@ export const commentsMock: CommentType[] = [
   {
     id: '0',
     userName: 'Vasya',
-    advantages: '4 string',
-    disadvantages: 'cant play',
+    advantage: '4 string',
+    disadvantage: 'cant play',
     comment: 'its guitar',
     rating: 3,
     createAt: new Date().toString(),
@@ -64,8 +64,8 @@ export const commentsMock: CommentType[] = [
   {
     id: '1',
     userName: 'Petya',
-    advantages: 'seems like gutiar of gods',
-    disadvantages: 'no one',
+    advantage: 'seems like gutiar of gods',
+    disadvantage: 'no one',
     comment: 'i want to get marry this guitar',
     rating: 4.7,
     createAt: new Date().toString(),
@@ -74,8 +74,8 @@ export const commentsMock: CommentType[] = [
   {
     id: '2',
     userName: 'Somebody',
-    advantages: 'WHAT A SOUND!!!',
-    disadvantages: 'i dont understand english',
+    advantage: 'WHAT A SOUND!!!',
+    disadvantage: 'i dont understand english',
     comment: 'I can play famous songs of Little Big band',
     rating: 5,
     createAt: new Date().toString(),
@@ -83,13 +83,56 @@ export const commentsMock: CommentType[] = [
   },
 ];
 
+export const fourCommentsMock: CommentType[] = [
+  {
+    id: '0',
+    userName: 'Vasya',
+    advantage: '4 string',
+    disadvantage: 'cant play',
+    comment: 'its guitar',
+    rating: 3,
+    createAt: new Date().toString(),
+    guitarId: 0,
+  },
+  {
+    id: '1',
+    userName: 'Petya',
+    advantage: 'seems like gutiar of gods',
+    disadvantage: 'no one',
+    comment: 'i want to get marry this guitar',
+    rating: 4.7,
+    createAt: new Date().toString(),
+    guitarId: 0,
+  },
+  {
+    id: '2',
+    userName: 'Somebody',
+    advantage: 'WHAT A SOUND!!!',
+    disadvantage: 'i dont understand english',
+    comment: 'I can play famous songs of Little Big band',
+    rating: 5,
+    createAt: new Date().toString(),
+    guitarId: 0,
+  },
+  {
+    id: '3',
+    userName: 'HellYeah',
+    advantage: 'BabskiyPigach',
+    disadvantage: 'i dont understand english',
+    comment: 'I can play famous songs of Little Big band',
+    rating: 4,
+    createAt: new Date().toString(),
+    guitarId: 0,
+  },
+];
+
 export const commentMock: CommentType = {
   id: '0',
   userName: 'Vasya',
-  advantages: '4 string',
-  disadvantages: 'cant play',
+  advantage: '4 string',
+  disadvantage: 'cant play',
   comment: 'its guitar',
   rating: 3,
   createAt: new Date().toString(),
   guitarId: 1,
-}
+};

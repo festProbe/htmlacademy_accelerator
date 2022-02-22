@@ -5,8 +5,15 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { ReducerState } from '../types/state';
 import { Action } from 'redux';
 import { APIRoute } from '../utils/const';
-import {loadComments, loadGuitars, loadProductInfo, loadTotalCount} from './actions';
-import {fetchCommentsAction, fetchGuitarAction, fetchAllGuitarsAction} from './api-actions';
+import {
+  loadComments,
+  loadGuitars,
+  loadProductInfo,
+  loadTotalCount,
+  setIsGuitarLoaded,
+  setIsGuitarsLoaded
+} from './actions';
+import {fetchCommentsAction, fetchGuitarAction, fetchGuitarsAction} from './api-actions';
 import {commentsMock, guitarMock, guitarsMock, totalCountMock} from '../utils/mocks';
 import {initialState} from './reducer';
 
@@ -25,11 +32,13 @@ describe('Async actions', () => {
         'x-total-count': totalCountMock,
       });
 
-    await store.dispatch(fetchAllGuitarsAction());
+    await store.dispatch(fetchGuitarsAction());
 
     expect(store.getActions()).toEqual([
+      setIsGuitarsLoaded(false),
       loadGuitars(guitarsMock),
       loadTotalCount(totalCountMock),
+      setIsGuitarsLoaded(true),
     ]);
   });
 
@@ -42,7 +51,9 @@ describe('Async actions', () => {
 
     await store.dispatch(fetchGuitarAction(id.toString()));
     expect(store.getActions()).toEqual([
+      setIsGuitarLoaded(false),
       loadProductInfo(guitarMock),
+      setIsGuitarLoaded(true),
     ]);
   });
 
@@ -50,7 +61,7 @@ describe('Async actions', () => {
     const store = mockStore(initialState);
     const id = guitarMock.id;
     mockAPI
-      .onGet(`${APIRoute.GUITARS}/${id}/${APIRoute.COMMENTS}`)
+      .onGet(`${APIRoute.GUITARS}/${id.toString()}${APIRoute.COMMENTS}`)
       .reply(200, commentsMock);
 
     const comments = {

@@ -7,7 +7,7 @@ type ReviewItemProps = {
 }
 
 function ReviewItem({ comment }: ReviewItemProps): JSX.Element {
-  const { rating, advantages, createAt, disadvantages, userName } = comment;
+  const { rating, advantage, createAt, disadvantage, userName } = comment;
 
   const stars = [];
   for (let i = 0; i < Math.round(rating); i++) {
@@ -34,9 +34,9 @@ function ReviewItem({ comment }: ReviewItemProps): JSX.Element {
         <span className="rate__count"></span><span className="rate__message"></span>
       </div>
       <h4 className="review__title title title--lesser">Достоинства:</h4>
-      <p className="review__value">{advantages}</p>
+      <p className="review__value">{advantage}</p>
       <h4 className="review__title title title--lesser">Недостатки:</h4>
-      <p className="review__value">{disadvantages}</p>
+      <p className="review__value">{disadvantage}</p>
       <h4 className="review__title title title--lesser">Комментарий:</h4>
       <p className="review__value">{comment.comment}</p>
     </div>

@@ -9,9 +9,9 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import {createAPI} from '../../../api/api';
 import {ReducerState} from '../../../types/state';
 import {APIRoute} from '../../../utils/const';
-import {guitarsMock, commentsMock} from '../../../utils/mocks';
+import {guitarsMock, commentsMock, fourCommentsMock} from '../../../utils/mocks';
 import {initialState} from '../../../store/reducer';
-import ReviewList from "./review-list";
+import ReviewList from './review-list';
 
 const api = createAPI();
 const mockAPI = new MockAdapter(api);
@@ -33,9 +33,19 @@ const fakeReviewList = (
 
 describe('Component: ReviewList', () => {
   it('should render correctly', () => {
-
     render(fakeReviewList);
-    expect(screen.getByText(/Показать еще отзывы/i)).toBeInTheDocument();
     expect(screen.getByText(/Оставить отзыв/i)).toBeInTheDocument();
+  });
+
+  it('should display button if number of comments > 3', () => {
+    const fakeReviewListWithFourComments = (
+      <Provider store={store}>
+        <Router history={history}>
+          <ReviewList comments={fourCommentsMock}/>
+        </Router>
+      </Provider>
+    );
+    render(fakeReviewListWithFourComments);
+    expect(screen.getByText(/Показать еще отзывы/i)).toBeInTheDocument();
   });
 });

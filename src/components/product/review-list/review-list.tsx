@@ -65,6 +65,45 @@ function ReviewList({ comments }: ReviewListProps): JSX.Element {
     window.addEventListener('keydown', closeNewReviewModal);
   };
 
+  function checkPosition() {
+    // Нам потребуется знать высоту документа и высоту экрана.
+    const height = document.body.offsetHeight;
+    const screenHeight = window.innerHeight;
+
+    // Они могут отличаться: если на странице много контента,
+    // высота документа будет больше высоты экрана (отсюда и скролл).
+
+    // Записываем, сколько пикселей пользователь уже проскроллил.
+    const scrolled = window.scrollY;
+
+    // Обозначим порог, по приближении к которому
+    // будем вызывать какое-то действие.
+    // В нашем случае — четверть экрана до конца страницы.
+    const threshold = height - screenHeight / 4;
+
+    // Отслеживаем, где находится низ экрана относительно страницы.
+    const position = scrolled + screenHeight;
+
+    if (position >= threshold) {
+      setShowedCommentCount(showedCommentCount + COMMENTS_COUNT_PER_STEP);
+    }
+  }
+
+  function throttle(fn: () => void, wait= 500) {
+    let shouldWait = false;
+
+    return function() {
+      if (!shouldWait) {
+        fn();
+        shouldWait = true;
+        setTimeout(() => shouldWait = false, wait);
+      }
+    };
+  }
+
+  window.addEventListener('scroll', throttle(checkPosition));
+  window.addEventListener('resize', throttle(checkPosition));
+
   return (
     <section className="reviews">
       <h3 className="reviews__title title title--bigger">Отзывы</h3>

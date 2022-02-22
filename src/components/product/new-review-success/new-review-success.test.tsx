@@ -5,31 +5,29 @@ import {createMemoryHistory} from 'history';
 import {Provider} from 'react-redux';
 import {Router} from 'react-router-dom';
 import thunk, {ThunkDispatch} from 'redux-thunk';
-import {createAPI} from '../../api/api';
-import {ReducerState} from '../../types/state';
-import {commentsMock, guitarMock} from '../../utils/mocks';
-import {initialState} from '../../store/reducer';
-import Product from './product';
-
+import {ReducerState} from '../../../types/state';
+import {initialState} from '../../../store/reducer';
+import {createAPI} from '../../../api/api';
+import NewReviewSuccess from './new-review-success';
 const api = createAPI();
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore<ReducerState, Action, ThunkDispatch<ReducerState, typeof api, Action>>(middlewares);
-const store = mockStore({...initialState, guitar: guitarMock, isGuitarLoaded: true, allComments: [{id: '0', comments: commentsMock}]});
+const store = mockStore(initialState);
 const history = createMemoryHistory();
 
-const fakeProduct = (
+const fakeNewReviewSuccess = (
   <Provider store={store}>
     <Router history={history}>
-      <Product/>
+      <NewReviewSuccess setIsSuccessModalOpened={jest.fn}/>
     </Router>
   </Provider>
 );
 
-describe('Component: Product', () => {
+describe('Component: NewReviewSuccess', () => {
   it('should render correctly', () => {
 
-    render(fakeProduct);
-    expect(screen.getByText(/Количество струн:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Характеристики/i)).toBeInTheDocument();
+    render(fakeNewReviewSuccess);
+    expect(screen.getByText(/Спасибо за ваш отзыв!/i)).toBeInTheDocument();
+    expect(screen.getByText(/К покупкам!/i)).toBeInTheDocument();
   });
 });
