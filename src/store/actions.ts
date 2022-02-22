@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
-import {AllCommments, GuitarType} from '../types/data';
+import {AllComments, GuitarType} from '../types/data';
 
 export const loadAllGuitars = createAction<GuitarType[]>(ActionType.LoadAllGuitars);
 export const loadGuitars = createAction<GuitarType[]>(ActionType.LoadGuitars);
@@ -8,7 +8,7 @@ export const setIsGuitarsLoaded = createAction<boolean>(ActionType.SetIsGuitarsL
 export const loadProductInfo = createAction<GuitarType>(ActionType.LoadProductInfo);
 export const setIsGuitarLoaded = createAction<boolean>(ActionType.SetIsGuitarLoaded);
 export const loadTotalCount = createAction<number>(ActionType.LoadTotalCount);
-export const loadComments = createAction<AllCommments>(ActionType.LoadComments);
+export const loadComments = createAction<AllComments>(ActionType.LoadComments);
 export const setCurrentPage = createAction<number>(ActionType.SetCurrentPage);
 export const setMinPrice = createAction<string>(ActionType.SetMinPrice);
 export const setMaxPrice = createAction<string>(ActionType.SetMaxPrice);
