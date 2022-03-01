@@ -1,4 +1,4 @@
-import {AllComments, GuitarType} from './data';
+import {CommentsCount, CommentType, GuitarType} from './data';
 
 export type ReducerState = {
   allGuitars: GuitarType[],
@@ -7,7 +7,8 @@ export type ReducerState = {
   guitar: GuitarType | null,
   isGuitarLoaded: boolean,
   totalCount: number,
-  allComments: AllComments[],
+  comments: CommentType[],
+  commentsCount: CommentsCount[],
   currentPage: number,
   minPrice: string,
   maxPrice: string,

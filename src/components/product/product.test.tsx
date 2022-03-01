@@ -14,7 +14,7 @@ import Product from './product';
 const api = createAPI();
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore<ReducerState, Action, ThunkDispatch<ReducerState, typeof api, Action>>(middlewares);
-const store = mockStore({...initialState, guitar: guitarMock, isGuitarLoaded: true, allComments: [{id: '0', comments: commentsMock}]});
+const store = mockStore({...initialState, guitar: guitarMock, isGuitarLoaded: true, comments: commentsMock});
 const history = createMemoryHistory();
 
 const fakeProduct = (

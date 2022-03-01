@@ -9,7 +9,7 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import {createAPI} from '../../../api/api';
 import {ReducerState} from '../../../types/state';
 import {APIRoute} from '../../../utils/const';
-import {guitarsMock, commentsMock, fourCommentsMock} from '../../../utils/mocks';
+import {guitarsMock} from '../../../utils/mocks';
 import {initialState} from '../../../store/reducer';
 import ReviewList from './review-list';
 
@@ -26,7 +26,7 @@ mockAPI
 const fakeReviewList = (
   <Provider store={store}>
     <Router history={history}>
-      <ReviewList comments={commentsMock}/>
+      <ReviewList/>
     </Router>
   </Provider>
 );
@@ -41,7 +41,7 @@ describe('Component: ReviewList', () => {
     const fakeReviewListWithFourComments = (
       <Provider store={store}>
         <Router history={history}>
-          <ReviewList comments={fourCommentsMock}/>
+          <ReviewList/>
         </Router>
       </Provider>
     );

@@ -16,10 +16,10 @@ const api = createAPI();
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore<ReducerState, Action, ThunkDispatch<ReducerState, typeof api, Action>>(middlewares);
 const store = mockStore({
-  ...initialState, allComments: [
-    {id: '0', comments: commentsMock},
-    {id: '1', comments: fourCommentsMock},
-    {id: '2', comments: commentsMock},
+  ...initialState, commentsCount: [
+    {id: '0', count: commentsMock.length},
+    {id: '1', count: fourCommentsMock.length},
+    {id: '2', count: commentsMock.length},
   ],
   totalCount: 3,
 });

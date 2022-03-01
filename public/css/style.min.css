@@ -302,7 +302,7 @@ button {
   flex-grow: 1;
 }
 .hidden {
-  display: none;
+  display: none !important;
 }
 .visually-hidden {
   position: absolute;
@@ -1327,8 +1327,9 @@ button {
   background-color: inherit;
 }
 .form-review__input--name {
-  margin-bottom: 0;
+  margin-bottom: 15px;
 }
+
 .form-review__input--textarea {
   height: 70px;
 }
@@ -1357,8 +1358,10 @@ button {
   color: #000;
   letter-spacing: 0.02em;
 }
+
 .form-review__warning {
   display: block;
+  margin-top: -15px;
   padding-right: 5px;
   font-size: 10px;
   line-height: 15px;
@@ -1366,6 +1369,7 @@ button {
   text-align: end;
   letter-spacing: 0.02em;
 }
+
 .form-review__button {
   margin-top: 7px;
   margin-right: 70px;
@@ -1666,9 +1670,9 @@ button {
   width: 100%;
   color: #c90606;
 }
-.rate--reverse {
-  flex-direction: row-reverse;
-  justify-content: flex-end;
+.rate--noreverse {
+  flex-direction: row;
+  justify-content: flex-start;
   margin-left: -3px;
 }
 .rate svg {
@@ -1682,7 +1686,7 @@ button {
   color: #585757;
 }
 .rate:not(:checked) > label {
-  float: right;
+  float: left;
   overflow: hidden;
   width: 18px;
   height: 20px;
@@ -1699,13 +1703,12 @@ button {
   background-size: 18px 20px;
   content: "";
 }
-.rate > input:checked ~ label {
+.rate--checked {
   background: url(../img/sprite/icon-full-star.svg) no-repeat top 0 left 0;
   background-size: 18px 20px;
 }
-.rate:not(:checked) > label:hover,
-.rate:not(:checked) > label:hover ~ label {
-  background: url(../img/sprite/icon-full-star.svg) no-repeat top 0 left 0;
+.rate--not-checked {
+  background: url(../img/sprite/icon-star.svg) no-repeat top 0 left 0;
   background-size: 18px 20px;
 }
 .rate > input:focus + label {
@@ -1806,9 +1809,7 @@ button {
   margin: 0 auto;
 }
 .reviews__up-button {
-  right: 0;
-  bottom: -51px;
-  position: absolute;
+  margin-left: auto;
 }
 .review {
   margin-bottom: 30px;

@@ -5,6 +5,7 @@ import {
   loadGuitars,
   loadProductInfo,
   loadComments,
+  loadCommentsCount,
   loadTotalCount,
   setMinPricePlaceholder,
   setMaxPricePlaceholder,
@@ -19,7 +20,7 @@ export const fetchAllGuitarsAction = (): ThunkActionResult =>
     try {
       const response = await api.get<GuitarType[]>(APIRoute.GUITARS);
       dispatch(loadAllGuitars(response.data));
-      response.data.forEach((guitar) => dispatch(fetchCommentsAction(guitar.id.toString())));
+      response.data.forEach((guitar) => dispatch(fetchCommentsCountAction(guitar.id.toString())));
     } catch {
       toast.error('Ошибка при загрузке объявлений.');
     }
@@ -73,15 +74,25 @@ export const fetchGuitarAction = (id: string): ThunkActionResult =>
     }
   };
 
+export const fetchCommentsCountAction = (id: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      const {data} = await api.get<CommentType[]>(`${APIRoute.GUITARS}/${id}${APIRoute.COMMENTS}`);
+      const commentsCount = {
+        id: id,
+        count: data.length,
+      };
+      dispatch(loadCommentsCount(commentsCount));
+    } catch {
+      toast.error('Ошибка при загрузке количества комментариев');
+    }
+  };
+
 export const fetchCommentsAction = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
       const {data} = await api.get<CommentType[]>(`${APIRoute.GUITARS}/${id}${APIRoute.COMMENTS}`);
-      const comments = {
-        id: id,
-        comments: data,
-      };
-      dispatch(loadComments(comments));
+      dispatch(loadComments(data));
     } catch {
       toast.error('Ошибка при загрузке комментариев');
     }
@@ -91,7 +102,9 @@ export const sendNewCommentAction = (comment: CommentPostType): ThunkActionResul
   async (dispatch, _getState, api): Promise<void> => {
     try {
       await api.post<CommentPostType>(`${APIRoute.GUITARS}/${comment.guitarId}${APIRoute.COMMENTS}`, comment);
-      dispatch(fetchAllGuitarsAction());
+      if (comment.guitarId !== undefined){
+        dispatch(fetchCommentsAction(comment.guitarId.toString()));
+      }
     } catch {
       toast.error('Ошибка при отправке комментария');
     }

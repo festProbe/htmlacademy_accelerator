@@ -21,9 +21,9 @@ export type CommentType = {
   guitarId: number
 }
 
-export type AllComments = {
+export type CommentsCount = {
   id: string,
-  comments: CommentType[],
+  count: number,
 }
 
 

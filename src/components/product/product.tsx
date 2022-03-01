@@ -1,7 +1,7 @@
 import {MouseEvent, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
-import {fetchGuitarAction} from '../../store/api-actions';
+import {fetchCommentsAction, fetchGuitarAction} from '../../store/api-actions';
 import {selectComments, selectGuitar, selectIsGuitarLoaded, selectProductTab} from '../../store/selectors';
 import LoadingScreen from '../common/loading-screen/loading-screen';
 import MainLayout from '../common/main-layout/main-layout';
@@ -13,13 +13,13 @@ function Product(): JSX.Element {
   const dispatch = useDispatch();
   const guitar = useSelector(selectGuitar);
   const isGuitarLoaded = useSelector(selectIsGuitarLoaded);
-  const comments = useSelector(selectComments).filter((comment) => comment.id === guitar?.id.toString())[0]?.comments;
+  const comments = useSelector(selectComments);
   const productTab = useSelector(selectProductTab);
 
   useEffect(() => {
     dispatch(fetchGuitarAction(id));
+    dispatch(fetchCommentsAction(id));
   }, [id, dispatch]);
-
   if (!guitar || !isGuitarLoaded || !comments) {
     return (
       <MainLayout>
@@ -146,7 +146,7 @@ function Product(): JSX.Element {
               </Link>
             </div>
           </div>
-          <ReviewList comments={comments}/>
+          <ReviewList/>
         </div>
       </main>
     </MainLayout>

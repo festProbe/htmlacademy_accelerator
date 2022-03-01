@@ -64,10 +64,7 @@ describe('Async actions', () => {
       .onGet(`${APIRoute.GUITARS}/${id.toString()}${APIRoute.COMMENTS}`)
       .reply(200, commentsMock);
 
-    const comments = {
-      id: id.toString(),
-      comments: commentsMock,
-    };
+    const comments = commentsMock;
     await store.dispatch(fetchCommentsAction(id.toString()));
     expect(store.getActions()).toEqual([
       loadComments(comments),

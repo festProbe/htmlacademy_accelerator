@@ -1,48 +1,28 @@
-import { Link } from 'react-router-dom';
-import { CommentType } from '../../../types/data';
+import {Link} from 'react-router-dom';
+import {CommentType} from '../../../types/data';
 import ReviewItem from '../review-item/review-item';
-import { MouseEvent, useEffect, useState } from 'react';
+import {MouseEvent, useEffect, useState} from 'react';
 import NewReview from '../new-review/new-review';
 import NewReviewSuccess from '../new-review-success/new-review-success';
 import dayjs from 'dayjs';
+import {useSelector} from 'react-redux';
+import {selectComments} from '../../../store/selectors';
 
-type ReviewListProps = {
-  comments: CommentType[];
-}
-
-function ReviewList({ comments }: ReviewListProps): JSX.Element {
+function ReviewList(): JSX.Element {
   const COMMENTS_COUNT_PER_STEP = 3;
   const [showedCommentCount, setShowedCommentCount] = useState<number>(COMMENTS_COUNT_PER_STEP);
   const [showedComments, setShowedComments] = useState<CommentType[]>([]);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [isSuccessModalOpened, setIsSuccessModalOpened] = useState(false);
+  const comments = useSelector(selectComments);
   const DELAY = 500;
-
-  useEffect(() => {
-    if (!isModalOpened) {
-      window.removeEventListener('keydown', closeNewReviewModal);
-    }
-  }, [isModalOpened]);
-
-  useEffect(() => {
-    if (!isSuccessModalOpened) {
-      window.removeEventListener('keydown', closeNewReviewModal);
-    }
-  }, [isSuccessModalOpened]);
-
-  useEffect(() => {
-    const commentsCopy = comments.slice().sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
-    const commentCount = comments.length;
-    const newShowCommentCount = Math.min(commentCount, showedCommentCount);
-    setShowedComments(commentsCopy.slice(0, newShowCommentCount));
-  }, [comments, showedCommentCount]);
 
   const clickShowMoreHandler = (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     setShowedCommentCount(showedCommentCount + COMMENTS_COUNT_PER_STEP);
   };
 
-  const clickAnchorButtonHandler = (evt: MouseEvent<HTMLAnchorElement>) => {
+  const clickUpButtonHandler = (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     const header = document.querySelector('#header');
     header?.scrollIntoView({
@@ -83,7 +63,7 @@ function ReviewList({ comments }: ReviewListProps): JSX.Element {
   function throttle(fn: () => void, wait: number) {
     let shouldWait = false;
 
-    return function() {
+    return function () {
       if (!shouldWait) {
         fn();
         shouldWait = true;
@@ -94,6 +74,25 @@ function ReviewList({ comments }: ReviewListProps): JSX.Element {
 
   window.addEventListener('scroll', throttle(checkPosition, DELAY));
   window.addEventListener('resize', throttle(checkPosition, DELAY));
+
+  useEffect(() => {
+    if (!isModalOpened) {
+      window.removeEventListener('keydown', closeNewReviewModal);
+    }
+  }, [isModalOpened]);
+
+  useEffect(() => {
+    if (!isSuccessModalOpened) {
+      window.removeEventListener('keydown', closeNewReviewModal);
+    }
+  }, [isSuccessModalOpened]);
+
+  useEffect(() => {
+    const commentsCopy = comments.slice().sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
+    const commentCount = comments.length;
+    const newShowCommentCount = Math.min(commentCount, showedCommentCount);
+    setShowedComments(commentsCopy.slice(0, newShowCommentCount));
+  }, [comments, showedCommentCount]);
 
   return (
     <section className="reviews">
@@ -119,15 +118,15 @@ function ReviewList({ comments }: ReviewListProps): JSX.Element {
         >
           Показать еще отзывы
         </button> : ''}
-      <Link
+      <button
         className="button button--up button--red-border button--big reviews__up-button"
-        onClick={clickAnchorButtonHandler}
-        to="/"
+        onClick={clickUpButtonHandler}
       >
         Наверх
-      </Link>
-      {isModalOpened ? <NewReview setIsModalOpened={setIsModalOpened} setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
-      {isSuccessModalOpened ? <NewReviewSuccess setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
+      </button>
+      {isModalOpened ?
+        <NewReview setIsModalOpened={setIsModalOpened} setIsSuccessModalOpened={setIsSuccessModalOpened}/> : ''}
+      {isSuccessModalOpened ? <NewReviewSuccess setIsSuccessModalOpened={setIsSuccessModalOpened}/> : ''}
     </section>
   );
 }

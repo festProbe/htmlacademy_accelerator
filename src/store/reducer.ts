@@ -2,6 +2,7 @@ import {createReducer} from '@reduxjs/toolkit';
 import {ReducerState} from '../types/state';
 import {
   loadComments,
+  loadCommentsCount,
   loadAllGuitars,
   loadGuitars,
   setIsGuitarsLoaded,
@@ -27,7 +28,8 @@ const initialState: ReducerState = {
   guitar: null,
   isGuitarLoaded: false,
   totalCount: 0,
-  allComments: [],
+  commentsCount: [],
+  comments: [],
   currentPage: 1,
   minPrice: '',
   maxPrice: '',
@@ -60,8 +62,11 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(loadTotalCount, (state, action) => {
       state.totalCount = action.payload;
     })
+    .addCase(loadCommentsCount, (state, action) => {
+      state.commentsCount.push(action.payload);
+    })
     .addCase(loadComments, (state, action) => {
-      state.allComments.push(action.payload);
+      state.comments = action.payload;
     })
     .addCase(setCurrentPage, (state, action) => {
       state.currentPage = action.payload;

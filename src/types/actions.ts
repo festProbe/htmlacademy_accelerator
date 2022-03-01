@@ -11,6 +11,7 @@ export enum ActionType {
   SetIsGuitarLoaded = 'product/isGuitarLoaded',
   LoadTotalCount = 'main/loadTotalCount',
   LoadComments = 'product/loadComments',
+  LoadCommentsCount = 'main/loadCommentsCount',
   SetCurrentPage = 'main/setCurrentPage',
   SetMinPrice = 'main/filter/setMinPrice',
   SetMaxPrice = 'main/filter/setMaxPrice',
