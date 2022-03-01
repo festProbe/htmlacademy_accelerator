@@ -107,6 +107,10 @@ function NewReview({setIsModalOpened, setIsSuccessModalOpened}: NewReviewPropsTy
     setRateStars(evt.target.value);
   };
 
+  const blurRateLabelHandler = () => {
+    setRateStars('0');
+  };
+
   const mouseOverRateLabelHandler = (evt: MouseEvent<HTMLLabelElement>) => {
     setIsRateEmpty(false);
     const labelValue = evt.currentTarget.getAttribute('data-value');
@@ -166,7 +170,7 @@ function NewReview({setIsModalOpened, setIsSuccessModalOpened}: NewReviewPropsTy
                     <div className="rate rate--noreverse" onMouseLeave={mouseLeaveHandler}>
                       <input
                         className="visually-hidden" type="radio" id="star-1" name="rate" value="1"
-                        onChange={changeRatingHandler} onFocus={focusRateLabelHandler}
+                        onChange={changeRatingHandler} onFocus={focusRateLabelHandler} onBlur={blurRateLabelHandler}
                       />
                       <label
                         className="rate__label"
