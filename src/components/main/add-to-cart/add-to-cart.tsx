@@ -52,6 +52,7 @@ function AddToCart({ guitar, setAddingGuitarToCart, setIsAddingSuccessfulOpen }:
     }));
     document.body.style.overflow = 'hidden';
     setIsAddingSuccessfulOpen(true);
+    setAddingGuitarToCart(null);
     window.addEventListener('keydown', closeSuccessAddToCartPopup);
   };
 
