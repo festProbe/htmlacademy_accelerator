@@ -1,12 +1,12 @@
-import {Link} from 'react-router-dom';
-import {CommentType} from '../../../types/data';
+import { Link } from 'react-router-dom';
+import { CommentType } from '../../../types/data';
 import ReviewItem from '../review-item/review-item';
-import {MouseEvent, useEffect, useState} from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import NewReview from '../new-review/new-review';
 import NewReviewSuccess from '../new-review-success/new-review-success';
 import dayjs from 'dayjs';
-import {useSelector} from 'react-redux';
-import {selectComments} from '../../../store/selectors';
+import { useSelector } from 'react-redux';
+import { selectComments } from '../../../store/selectors';
 
 function ReviewList(): JSX.Element {
   const COMMENTS_COUNT_PER_STEP = 3;
@@ -125,8 +125,8 @@ function ReviewList(): JSX.Element {
         Наверх
       </button>
       {isModalOpened ?
-        <NewReview setIsModalOpened={setIsModalOpened} setIsSuccessModalOpened={setIsSuccessModalOpened}/> : ''}
-      {isSuccessModalOpened ? <NewReviewSuccess setIsSuccessModalOpened={setIsSuccessModalOpened}/> : ''}
+        <NewReview setIsModalOpened={setIsModalOpened} setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
+      {isSuccessModalOpened ? <NewReviewSuccess setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
     </section>
   );
 }

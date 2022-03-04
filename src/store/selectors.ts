@@ -1,8 +1,24 @@
-import {CommentsCount, CommentType, GuitarType} from '../types/data';
-import {ReducerState} from '../types/state';
+import { createSelector } from 'reselect';
+import { CommentsCount, CommentType, GuitarInCart, GuitarType } from '../types/data';
+import { ReducerState } from '../types/state';
 
 export const selectAllGuitars = (state: ReducerState): GuitarType[] => state.allGuitars;
 export const selectGuitars = (state: ReducerState): GuitarType[] => state.guitars;
+export const selectGuitarsInCart = (state: ReducerState): GuitarInCart[] => state.guitarsInCart;
+export const selectCountGuitarsInCart = createSelector(
+  selectGuitarsInCart,
+  (guitars) => {
+    if (guitars.length === 0) {
+      return 0;
+    }
+    const counts = guitars.map((guitar) => guitar.count);
+    return counts.reduce((prev, curr) => prev + curr);
+  },
+);
+export const selectGuitarsWithoutCount = createSelector(
+  selectGuitarsInCart,
+  (guitars) => guitars.map((guitar) => guitar.guitar),
+);
 export const selectMinPrice = (state: ReducerState): string => state.minPrice;
 export const selectMaxPrice = (state: ReducerState): string => state.maxPrice;
 export const selectMinPriceForPlaceholder = (state: ReducerState): number => state.minPricePlaceholder;

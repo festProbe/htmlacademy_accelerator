@@ -10,6 +10,11 @@ export type GuitarType = {
   price: number
 }
 
+export type GuitarInCart = {
+  guitar: GuitarType,
+  count: number,
+}
+
 export type CommentType = {
   id: string,
   userName: string,

@@ -1,20 +1,26 @@
-import {MouseEvent, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {Link, useParams} from 'react-router-dom';
-import {fetchCommentsAction, fetchGuitarAction} from '../../store/api-actions';
-import {selectComments, selectGuitar, selectIsGuitarLoaded, selectProductTab} from '../../store/selectors';
+import { MouseEvent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { fetchCommentsAction, fetchGuitarAction } from '../../store/api-actions';
+import { selectComments, selectGuitar, selectIsGuitarLoaded, selectProductTab } from '../../store/selectors';
 import LoadingScreen from '../common/loading-screen/loading-screen';
 import MainLayout from '../common/main-layout/main-layout';
 import ReviewList from './review-list/review-list';
-import {setProductTab} from '../../store/actions';
+import { setProductTab } from '../../store/actions';
+import { getRuGuitarType } from '../../utils/utils';
+import AddToCart from '../main/add-to-cart/add-to-cart';
+import { GuitarType } from '../../types/data';
+import SuccessAddedToCart from '../main/success-added-to-cart/success-added-to-cart';
 
 function Product(): JSX.Element {
-  const {id} = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch();
   const guitar = useSelector(selectGuitar);
   const isGuitarLoaded = useSelector(selectIsGuitarLoaded);
   const comments = useSelector(selectComments);
   const productTab = useSelector(selectProductTab);
+  const [addingGuitarToCart, setAddingGuitarToCart] = useState<null | GuitarType>(null);
+  const [isAddingSuccessfulOpen, setIsAddingSuccessfulOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchGuitarAction(id));
@@ -34,13 +40,13 @@ function Product(): JSX.Element {
               <li className="breadcrumbs__item"><Link className="link" to="/">Товар</Link>
               </li>
             </ul>
-            <LoadingScreen/>
+            <LoadingScreen />
           </div>
         </main>
       </MainLayout>
     );
   }
-  const {name, rating, previewImg, vendorCode, type, stringCount, description, price} = guitar;
+  const { name, rating, previewImg, vendorCode, type, stringCount, description, price } = guitar;
 
   const stars = [];
   for (let i = 0; i < Math.round(rating); i++) {
@@ -56,22 +62,23 @@ function Product(): JSX.Element {
       </svg>);
   }
 
-  const clickProductTabHandler = (evt:MouseEvent<HTMLButtonElement>) => {
+  const clickProductTabHandler = (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     dispatch(setProductTab(evt.currentTarget.value));
   };
 
-  const getRuGuitarType = (guitarType: string): string => {
-    switch (guitarType) {
-      case 'acoustic':
-        return 'Акустическая гитара';
-      case 'electric':
-        return 'Электрогитара';
-      case 'ukulele':
-        return 'Укулеле';
-      default:
-        return guitarType;
+  const closeAddToCartPopup = (evt: KeyboardEvent) => {
+    if (evt.key === 'Esc' || evt.key === 'Escape') {
+      document.body.style.overflow = '';
+      setAddingGuitarToCart(null);
     }
+  };
+
+  const clickAddToCartHandler = (evt: MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    document.body.style.overflow = 'hidden';
+    setAddingGuitarToCart(guitar);
+    window.addEventListener('keydown', closeAddToCartPopup);
   };
 
   return (
@@ -141,13 +148,15 @@ function Product(): JSX.Element {
             <div className="product-container__price-wrapper">
               <p className="product-container__price-info product-container__price-info--title">Цена:</p>
               <p className="product-container__price-info product-container__price-info--value">{price} ₽</p>
-              <Link className="button button--red button--big product-container__button" to="/">
+              <Link className="button button--red button--big product-container__button" to="/" onClick={clickAddToCartHandler}>
                 Добавить в корзину
               </Link>
             </div>
           </div>
-          <ReviewList/>
+          <ReviewList />
         </div>
+        {addingGuitarToCart !== null ? <AddToCart guitar={guitar} setAddingGuitarToCart={setAddingGuitarToCart} setIsAddingSuccessfulOpen={setIsAddingSuccessfulOpen} /> : ''}
+        {isAddingSuccessfulOpen ? <SuccessAddedToCart setIsAddingSuccessfulOpen={setIsAddingSuccessfulOpen} /> : ''}
       </main>
     </MainLayout>
   );

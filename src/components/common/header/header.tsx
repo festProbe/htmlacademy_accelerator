@@ -1,7 +1,7 @@
-import {FocusEvent, useEffect, useRef, useState, ChangeEvent} from 'react';
+import { FocusEvent, useEffect, useRef, useState, ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectAllGuitars } from '../../../store/selectors';
+import { selectAllGuitars, selectCountGuitarsInCart } from '../../../store/selectors';
 import { GuitarType } from '../../../types/data';
 import { AppRoute } from '../../../utils/const';
 import logo from '../../../img/svg/logo.svg';
@@ -11,6 +11,7 @@ function Header(): JSX.Element {
   const [filteredGuitars, setFilteredGuitars] = useState<GuitarType[] | null>(null);
   const searchValue = useRef(null);
   const guitars = useSelector(selectAllGuitars);
+  const countOfGuitarsInCart = useSelector(selectCountGuitarsInCart);
 
   useEffect(() => {
     setFilteredGuitars(guitars.filter((guitar) => guitar.name.toLowerCase().includes(searchText.toLowerCase())));
@@ -31,7 +32,7 @@ function Header(): JSX.Element {
   };
 
   const blurSearchHandler = (evt: FocusEvent<HTMLDivElement>) => {
-    if (!evt.currentTarget.contains(evt.relatedTarget)){
+    if (!evt.currentTarget.contains(evt.relatedTarget)) {
       document.querySelector('.form-search__select-list')?.classList.add('hidden');
     }
   };
@@ -89,7 +90,7 @@ function Header(): JSX.Element {
             <use xlinkHref="#icon-basket"></use>
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
-          <span className="header__cart-count">2</span>
+          {countOfGuitarsInCart === 0 ? '' : <span className="header__cart-count">{countOfGuitarsInCart}</span>}
         </Link>
       </div>
     </header >

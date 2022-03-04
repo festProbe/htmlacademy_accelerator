@@ -1,10 +1,15 @@
-import {createReducer} from '@reduxjs/toolkit';
-import {ReducerState} from '../types/state';
+import { createReducer } from '@reduxjs/toolkit';
+import { GuitarInCart } from '../types/data';
+import { ReducerState } from '../types/state';
 import {
   loadComments,
   loadCommentsCount,
   loadAllGuitars,
   loadGuitars,
+  putGuitarInCart,
+  setCustomGuitarCount,
+  decreseGuitarInCart,
+  deleteGuitarFromCart,
   setIsGuitarsLoaded,
   loadTotalCount,
   loadProductInfo,
@@ -24,6 +29,7 @@ import {
 const initialState: ReducerState = {
   allGuitars: [],
   guitars: [],
+  guitarsInCart: [],
   isGuitarsLoaded: false,
   guitar: null,
   isGuitarLoaded: false,
@@ -42,6 +48,60 @@ const initialState: ReducerState = {
   productTab: 'characteristics',
 };
 
+const putGuitarsInCart = (state: ReducerState, payload: GuitarInCart): GuitarInCart[] => {
+  const result: GuitarInCart[] = state.guitarsInCart;
+  if (state.guitarsInCart.length === 0) {
+    result.push(payload);
+    return result;
+  } else {
+    const ids = state.guitarsInCart.map((guitarInCart) => guitarInCart.guitar.id);
+    if (ids.includes(payload.guitar.id)) {
+      state.guitarsInCart.forEach((guitar, index) => {
+        if (guitar.guitar.id === payload.guitar.id) {
+          result[index].count += 1;
+          return result;
+        }
+      });
+    } else {
+      result.push(payload);
+    }
+  }
+  return result;
+};
+
+const setCustomCount = (state: ReducerState, payload: GuitarInCart) => {
+  const result = state.guitarsInCart;
+  state.guitarsInCart.forEach((guitarInCart, index) => {
+    if (guitarInCart.guitar.id === payload.guitar.id) {
+      result[index].count = payload.count;
+    }
+  });
+  return result;
+};
+
+const deleteGuitarsInCart = (state: ReducerState, payload: GuitarInCart): GuitarInCart[] => {
+  let result = state.guitarsInCart;
+  state.guitarsInCart.forEach((guitarInCart, index) => {
+    if (guitarInCart.guitar.id === payload.guitar.id) {
+      result = [
+        ...result.slice(0, index),
+        ...result.slice(index + 1),
+      ];
+    }
+  });
+  return result;
+};
+
+const decreseGuitarCountInCart = (state: ReducerState, payload: GuitarInCart): GuitarInCart[] => {
+  const result = state.guitarsInCart;
+  state.guitarsInCart.forEach((guitarInCart, index) => {
+    if (guitarInCart.guitar.id === payload.guitar.id) {
+      result[index].count -= 1;
+    }
+  });
+  return result;
+};
+
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(loadAllGuitars, (state, action) => {
@@ -49,6 +109,18 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadGuitars, (state, action) => {
       state.guitars = action.payload;
+    })
+    .addCase(putGuitarInCart, (state, action) => {
+      state.guitarsInCart = putGuitarsInCart(state, action.payload);
+    })
+    .addCase(setCustomGuitarCount, (state, action) => {
+      state.guitarsInCart = setCustomCount(state, action.payload);
+    })
+    .addCase(decreseGuitarInCart, (state, action) => {
+      state.guitarsInCart = decreseGuitarCountInCart(state, action.payload);
+    })
+    .addCase(deleteGuitarFromCart, (state, action) => {
+      state.guitarsInCart = deleteGuitarsInCart(state, action.payload);
     })
     .addCase(setIsGuitarsLoaded, (state, action) => {
       state.isGuitarsLoaded = action.payload;
@@ -100,4 +172,4 @@ const reducer = createReducer(initialState, (builder) => {
     });
 });
 
-export {reducer, initialState};
+export { reducer, initialState };

@@ -1,9 +1,13 @@
 import { createAction } from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
-import {CommentsCount, CommentType, GuitarType} from '../types/data';
+import { CommentsCount, CommentType, GuitarInCart, GuitarType } from '../types/data';
 
 export const loadAllGuitars = createAction<GuitarType[]>(ActionType.LoadAllGuitars);
 export const loadGuitars = createAction<GuitarType[]>(ActionType.LoadGuitars);
+export const putGuitarInCart = createAction<GuitarInCart>(ActionType.PutGuitarInCart);
+export const setCustomGuitarCount = createAction<GuitarInCart>(ActionType.SetCustomGuitarCount);
+export const decreseGuitarInCart = createAction<GuitarInCart>(ActionType.DecreseGuitarInCart);
+export const deleteGuitarFromCart = createAction<GuitarInCart>(ActionType.DeleteGuitarFromCart);
 export const setIsGuitarsLoaded = createAction<boolean>(ActionType.SetIsGuitarsLoaded);
 export const loadProductInfo = createAction<GuitarType>(ActionType.LoadProductInfo);
 export const setIsGuitarLoaded = createAction<boolean>(ActionType.SetIsGuitarLoaded);

@@ -1,13 +1,14 @@
-import {GuitarType} from '../../../types/data';
+import { GuitarType } from '../../../types/data';
 import Card from '../card/card';
-import {useSelector} from 'react-redux';
-import {selectCommentsCount, selectGuitarsCount} from '../../../store/selectors';
+import { useSelector } from 'react-redux';
+import { selectCommentsCount, selectGuitarsCount } from '../../../store/selectors';
 
 type GuitarListProps = {
   guitars: GuitarType[];
+  setAddingGuitarToCart: React.Dispatch<React.SetStateAction<GuitarType | null>>;
 }
 
-function GuitarsList({guitars}: GuitarListProps): JSX.Element {
+function GuitarsList({ guitars, setAddingGuitarToCart }: GuitarListProps): JSX.Element {
   const guitarCount = useSelector(selectGuitarsCount);
   const commentsCount = useSelector(selectCommentsCount);
   const cards = guitars.map((guitar) => {
@@ -17,6 +18,7 @@ function GuitarsList({guitars}: GuitarListProps): JSX.Element {
         guitar={guitar}
         key={guitar.id}
         commentsCount={length}
+        setAddingGuitarToCart={setAddingGuitarToCart}
       />
     );
   });

@@ -1,13 +1,19 @@
+import { MouseEvent } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { selectGuitarsWithoutCount } from '../../../store/selectors';
 import { GuitarType } from '../../../types/data';
 import { AppRoute } from '../../../utils/const';
 
 type CardProps = {
-  guitar: GuitarType
-  commentsCount: number,
+  guitar: GuitarType;
+  commentsCount: number;
+  setAddingGuitarToCart: React.Dispatch<React.SetStateAction<GuitarType | null>>;
 }
 
-function Card({ guitar, commentsCount }: CardProps): JSX.Element {
+function Card({ guitar, commentsCount, setAddingGuitarToCart }: CardProps): JSX.Element {
+  const guitarsInCart = useSelector(selectGuitarsWithoutCount);
+  const guitarsIds = guitarsInCart.map((guitarInCart) => guitarInCart.id);
   const { previewImg, name, id, rating, price } = guitar;
 
   const stars = [];
@@ -23,6 +29,21 @@ function Card({ guitar, commentsCount }: CardProps): JSX.Element {
         <use xlinkHref="#icon-star"></use>
       </svg>);
   }
+
+  const closeAddToCartPopup = (evt: KeyboardEvent) => {
+    if (evt.key === 'Esc' || evt.key === 'Escape') {
+      document.body.style.overflow = '';
+      setAddingGuitarToCart(null);
+    }
+  };
+
+  const clickAddToCartHandler = (evt: MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    document.body.style.overflow = 'hidden';
+    setAddingGuitarToCart(guitar);
+    window.addEventListener('keydown', closeAddToCartPopup);
+  };
+
   return (
     <div className="product-card"><img src={previewImg} srcSet={`${previewImg} 2x`} width="75" height="190" alt="СURT Z30 Plus Acoustics" />
       <div className="product-card__info">
@@ -34,7 +55,11 @@ function Card({ guitar, commentsCount }: CardProps): JSX.Element {
         <p className="product-card__price"><span className="visually-hidden">Цена:</span>{price} ₽
         </p>
       </div>
-      <div className="product-card__buttons"><Link className="button button--mini" to={`${AppRoute.PRODUCT}/${id}`}>Подробнее</Link><Link className="button button--red button--mini button--add-to-cart" to="/">Купить</Link>
+      <div className="product-card__buttons">
+        <Link className="button button--mini" to={`${AppRoute.PRODUCT}/${id}`}>Подробнее</Link>
+        {guitarsIds.includes(guitar.id) ?
+          <Link className="button button--red-border button--mini button--in-cart" to={AppRoute.CART}>В Корзине</Link> :
+          <Link className="button button--red button--mini button--add-to-cart" to={AppRoute.MAIN} onClick={clickAddToCartHandler}>Купить</Link>}
       </div>
     </div>
   );
