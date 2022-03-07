@@ -7,28 +7,27 @@ import {Router} from 'react-router-dom';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import {ReducerState} from '../../../types/state';
 import {initialState} from '../../../store/reducer';
-import NewReview from './new-review';
 import {createAPI} from '../../../api/api';
-
+import NewReviewSuccess from './new-review-success-popup';
 const api = createAPI();
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore<ReducerState, Action, ThunkDispatch<ReducerState, typeof api, Action>>(middlewares);
 const store = mockStore(initialState);
 const history = createMemoryHistory();
 
-const fakeNewReview = (
+const fakeNewReviewSuccess = (
   <Provider store={store}>
     <Router history={history}>
-      <NewReview setIsModalOpened={jest.fn} setIsSuccessModalOpened={jest.fn}/>
+      <NewReviewSuccess setIsSuccessModalOpened={jest.fn}/>
     </Router>
   </Provider>
 );
 
-describe('Component: NewReview', () => {
+describe('Component: NewReviewSuccess', () => {
   it('should render correctly', () => {
 
-    render(fakeNewReview);
-    expect(screen.getByText(/Оставить отзыв/i)).toBeInTheDocument();
-    expect(screen.getByText(/Ваша Оценка/i)).toBeInTheDocument();
+    render(fakeNewReviewSuccess);
+    expect(screen.getByText(/Спасибо за ваш отзыв!/i)).toBeInTheDocument();
+    expect(screen.getByText(/К покупкам!/i)).toBeInTheDocument();
   });
 });

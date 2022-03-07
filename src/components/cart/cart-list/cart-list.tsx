@@ -1,5 +1,7 @@
+import { useRef, useState } from 'react';
 import { GuitarInCart } from '../../../types/data';
 import CartItem from '../cart-item/cart-item';
+import Promo from '../promo/promo';
 
 type CartListProps = {
   guitars: GuitarInCart[];
@@ -7,6 +9,10 @@ type CartListProps = {
 }
 
 function CartList({ guitars, setDeletingGuitar }: CartListProps): JSX.Element {
+  const [isDiscountUsed, setIsDiscountUsed] = useState(false);
+  const discountRef = useRef(null);
+  const WITHOUT_DISCOUNT = 0;
+  const WITH_DISCOUNT = 3000;
   let totalCount = 0;
   const cards = guitars.map((guitar) => {
     totalCount += guitar.guitar.price * guitar.count;
@@ -21,22 +27,11 @@ function CartList({ guitars, setDeletingGuitar }: CartListProps): JSX.Element {
     <div className="cart">
       {cards}
       <div className="cart__footer">
-        <div className="cart__coupon coupon">
-          <h2 className="title title--little coupon__title">Промокод на скидку</h2>
-          <p className="coupon__info">Введите свой промокод, если он у вас есть.</p>
-          <form className="coupon__form" id="coupon-form" method="post" action="/">
-            <div className="form-input coupon__input">
-              <label className="visually-hidden">Промокод</label>
-              <input type="text" placeholder="Введите промокод" id="coupon" name="coupon" />
-              <p className="form-input__message form-input__message--success">Промокод принят</p>
-            </div>
-            <button className="button button--big coupon__button">Применить</button>
-          </form>
-        </div>
+        <Promo setIsDiscountUsed={setIsDiscountUsed}/>
         <div className="cart__total-info">
           <p className="cart__total-item"><span className="cart__total-value-name">Всего:</span><span className="cart__total-value">{totalCount} ₽</span></p>
-          <p className="cart__total-item"><span className="cart__total-value-name">Скидка:</span><span className="cart__total-value cart__total-value--bonus">- 3000 ₽</span></p>
-          <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span><span className="cart__total-value cart__total-value--payment">49 000 ₽</span></p>
+          <p className="cart__total-item"><span className="cart__total-value-name" ref={discountRef}>Скидка:</span><span className={`cart__total-value ${isDiscountUsed ? 'cart__total-value--bonus' : ''}`}>{isDiscountUsed ? - WITH_DISCOUNT : WITHOUT_DISCOUNT} ₽</span></p>
+          <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span><span className="cart__total-value cart__total-value--payment">{isDiscountUsed ? totalCount - WITH_DISCOUNT : totalCount} ₽</span></p>
           <button className="button button--red button--big cart__order-button">Оформить заказ</button>
         </div>
       </div>

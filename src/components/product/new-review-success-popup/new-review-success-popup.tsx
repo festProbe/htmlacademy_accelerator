@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction, MouseEvent, useRef} from 'react';
+import { Dispatch, SetStateAction, MouseEvent, useRef } from 'react';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import FocusTrap from 'focus-trap-react';
 
@@ -6,7 +6,7 @@ type NewReviewSuccessPropsType = {
   setIsSuccessModalOpened: Dispatch<SetStateAction<boolean>>;
 };
 
-function NewReviewSuccess({setIsSuccessModalOpened}: NewReviewSuccessPropsType): JSX.Element {
+function NewReviewSuccessPopup({ setIsSuccessModalOpened }: NewReviewSuccessPropsType): JSX.Element {
   const newReviewSuccessModalRef = useRef(null);
   const modalSuccessStyle = {
     width: '550px',
@@ -60,4 +60,4 @@ function NewReviewSuccess({setIsSuccessModalOpened}: NewReviewSuccessPropsType):
   );
 }
 
-export default NewReviewSuccess;
+export default NewReviewSuccessPopup;

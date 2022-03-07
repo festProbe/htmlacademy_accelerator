@@ -9,11 +9,11 @@ import {
   useState,
   useEffect
 } from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectGuitar} from '../../../store/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectGuitar } from '../../../store/selectors';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
-import {CommentPostType} from '../../../types/data';
-import {sendNewCommentAction} from '../../../store/api-actions';
+import { CommentPostType } from '../../../types/data';
+import { sendNewCommentAction } from '../../../store/api-actions';
 import FocusTrap from 'focus-trap-react';
 
 type NewReviewPropsType = {
@@ -21,7 +21,7 @@ type NewReviewPropsType = {
   setIsSuccessModalOpened: Dispatch<SetStateAction<boolean>>;
 }
 
-function NewReview({setIsModalOpened, setIsSuccessModalOpened}: NewReviewPropsType): JSX.Element {
+function NewReviewPopup({ setIsModalOpened, setIsSuccessModalOpened }: NewReviewPropsType): JSX.Element {
   const guitar = useSelector(selectGuitar);
   const dispatch = useDispatch();
   const newReviewModalRef = useRef(null);
@@ -56,27 +56,27 @@ function NewReview({setIsModalOpened, setIsSuccessModalOpened}: NewReviewPropsTy
   const changeUserNameHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     setIsNameEmpty(false);
     const value = evt.currentTarget.value;
-    setNewReview({...newReview, userName: value});
+    setNewReview({ ...newReview, userName: value });
   };
 
   const changeAdvantageHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.currentTarget.value;
-    setNewReview({...newReview, advantage: value});
+    setNewReview({ ...newReview, advantage: value });
   };
 
   const changeDisadvantageHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.currentTarget.value;
-    setNewReview({...newReview, disadvantage: value});
+    setNewReview({ ...newReview, disadvantage: value });
   };
 
   const changeRatingHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.currentTarget.value;
-    setNewReview({...newReview, rating: Number(value)});
+    setNewReview({ ...newReview, rating: Number(value) });
   };
 
   const changeCommentHandler = (evt: ChangeEvent<HTMLTextAreaElement>) => {
     const value = evt.currentTarget.value;
-    setNewReview({...newReview, comment: value});
+    setNewReview({ ...newReview, comment: value });
   };
 
   const closeOnEscNewReviewModal = (evt: KeyboardEvent) => {
@@ -285,4 +285,4 @@ function NewReview({setIsModalOpened, setIsSuccessModalOpened}: NewReviewPropsTy
   );
 }
 
-export default NewReview;
+export default NewReviewPopup;

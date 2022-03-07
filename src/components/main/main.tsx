@@ -22,9 +22,9 @@ import {
   setSortType,
   setStringsCounts
 } from '../../store/actions';
-import AddToCart from './add-to-cart/add-to-cart';
+import AddToCart from './add-to-cart-popup/add-to-cart-popup';
 import { GuitarType } from '../../types/data';
-import SuccessAddedToCart from './success-added-to-cart/success-added-to-cart';
+import SuccessAddedToCart from './success-added-to-cart-popup/success-added-to-cart-popup';
 
 function Main(): JSX.Element {
   const dispatch = useDispatch();

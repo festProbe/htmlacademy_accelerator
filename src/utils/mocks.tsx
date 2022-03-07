@@ -1,4 +1,4 @@
-import {CommentType, GuitarType} from '../types/data';
+import { CommentType, GuitarInCart, GuitarType } from '../types/data';
 
 export const guitarsMock: GuitarType[] = [
   {
@@ -135,4 +135,9 @@ export const commentMock: CommentType = {
   rating: 3,
   createAt: new Date().toString(),
   guitarId: 1,
+};
+
+export const guitarInCartMock: GuitarInCart = {
+  guitar: guitarMock,
+  count: 1,
 };

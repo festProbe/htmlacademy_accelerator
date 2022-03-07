@@ -8,9 +8,9 @@ import MainLayout from '../common/main-layout/main-layout';
 import ReviewList from './review-list/review-list';
 import { setProductTab } from '../../store/actions';
 import { getRuGuitarType } from '../../utils/utils';
-import AddToCart from '../main/add-to-cart/add-to-cart';
+import AddToCart from '../main/add-to-cart-popup/add-to-cart-popup';
 import { GuitarType } from '../../types/data';
-import SuccessAddedToCart from '../main/success-added-to-cart/success-added-to-cart';
+import SuccessAddedToCart from '../main/success-added-to-cart-popup/success-added-to-cart-popup';
 
 function Product(): JSX.Element {
   const { id } = useParams<{ id: string }>();

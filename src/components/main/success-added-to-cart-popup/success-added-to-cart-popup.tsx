@@ -8,7 +8,7 @@ type SuccessAddedToCartProps = {
   setIsAddingSuccessfulOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function SuccessAddedToCart({ setIsAddingSuccessfulOpen }: SuccessAddedToCartProps): JSX.Element {
+function SuccessAddedToCartPopup({ setIsAddingSuccessfulOpen }: SuccessAddedToCartProps): JSX.Element {
   const successAddedToCartModalRef = useRef(null);
 
   const closeSuccessAddedPopup = () => {
@@ -47,4 +47,4 @@ function SuccessAddedToCart({ setIsAddingSuccessfulOpen }: SuccessAddedToCartPro
   );
 }
 
-export default SuccessAddedToCart;
+export default SuccessAddedToCartPopup;

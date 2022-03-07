@@ -13,7 +13,7 @@ type AddToCartProps = {
   setIsAddingSuccessfulOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AddToCart({ guitar, setAddingGuitarToCart, setIsAddingSuccessfulOpen }: AddToCartProps): JSX.Element {
+function AddToCartPopup({ guitar, setAddingGuitarToCart, setIsAddingSuccessfulOpen }: AddToCartProps): JSX.Element {
   const { previewImg, name, price, vendorCode, stringCount, type, id } = guitar;
   const addingToCartModalRef = useRef(null);
   const guitarsInCart = useSelector(selectGuitarsInCart);
@@ -87,4 +87,4 @@ function AddToCart({ guitar, setAddingGuitarToCart, setIsAddingSuccessfulOpen }:
   );
 }
 
-export default AddToCart;
+export default AddToCartPopup;

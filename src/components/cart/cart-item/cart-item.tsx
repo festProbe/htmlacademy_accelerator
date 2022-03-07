@@ -58,7 +58,7 @@ function CartItem({ guitar, setDeletingGuitar }: CartItemPropsType): JSX.Element
     <div className="cart-item">
       <button className="cart-item__close-button button-cross" type="button" aria-label="Удалить" onClick={clickDeleteGuitarFromCartHandler}><span className="button-cross__icon"></span><span className="cart-item__close-button-interactive-area"></span>
       </button>
-      <div className="cart-item__image"><img src={previewImg} srcSet="img/content/catalog-product-2@2x.jpg 2x" width="55" height="130" alt="ЭлектроГитара Честер bass" />
+      <div className="cart-item__image"><img src={previewImg} srcSet="img/content/catalog-product-2@2x.jpg 2x" width="55" height="130" alt={`Гитара ${name}`} />
       </div>
       <div className="product-info cart-item__info">
         <p className="product-info__title">{name}</p>

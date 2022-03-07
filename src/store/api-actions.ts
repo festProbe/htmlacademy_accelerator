@@ -1,6 +1,6 @@
-import {ThunkActionResult} from '../types/actions';
-import {GuitarType, CommentType, CommentPostType} from '../types/data';
-import {APIRoute, MAX_GUITARS_ON_PAGE} from '../utils/const';
+import { ThunkActionResult } from '../types/actions';
+import { GuitarType, CommentType, CommentPostType } from '../types/data';
+import { APIRoute, MAX_GUITARS_ON_PAGE } from '../utils/const';
 import {
   loadGuitars,
   loadProductInfo,
@@ -13,7 +13,7 @@ import {
   setIsGuitarsLoaded,
   setIsGuitarLoaded
 } from './actions';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export const fetchAllGuitarsAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -29,7 +29,7 @@ export const fetchAllGuitarsAction = (): ThunkActionResult =>
 export const getMinMaxPricePlaceholder = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const {guitarTypes, stringsCounts} = _getState();
+      const { guitarTypes, stringsCounts } = _getState();
       const typeQuery = guitarTypes.map((guitarType) => `&type=${guitarType}`).join('');
       const stringCountQuery = stringsCounts.map((stringCount) => `&stringCount=${stringCount}`).join('');
 
@@ -49,7 +49,7 @@ export const fetchGuitarsAction = (): ThunkActionResult =>
       const startGuitarCount = `_start=${MAX_GUITARS_ON_PAGE * (_getState().currentPage - 1)}`;
       const endGuitarCount = `_end=${MAX_GUITARS_ON_PAGE * _getState().currentPage}`;
       const limitGuitarCount = `_limit=${MAX_GUITARS_ON_PAGE}`;
-      const {minPrice, maxPrice, sortType, sortOrder, guitarTypes, stringsCounts} = _getState();
+      const { minPrice, maxPrice, sortType, sortOrder, guitarTypes, stringsCounts } = _getState();
       const typeQuery = guitarTypes.map((guitarType) => `&type=${guitarType}`).join('');
       const stringCountQuery = stringsCounts.map((stringCount) => `&stringCount=${stringCount}`).join('');
 
@@ -66,7 +66,7 @@ export const fetchGuitarAction = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
       dispatch(setIsGuitarLoaded(false));
-      const {data} = await api.get<GuitarType>(`${APIRoute.GUITARS}/${id}`);
+      const { data } = await api.get<GuitarType>(`${APIRoute.GUITARS}/${id}`);
       dispatch(loadProductInfo(data));
       dispatch(setIsGuitarLoaded(true));
     } catch {
@@ -77,7 +77,7 @@ export const fetchGuitarAction = (id: string): ThunkActionResult =>
 export const fetchCommentsCountAction = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const {data} = await api.get<CommentType[]>(`${APIRoute.GUITARS}/${id}${APIRoute.COMMENTS}`);
+      const { data } = await api.get<CommentType[]>(`${APIRoute.GUITARS}/${id}${APIRoute.COMMENTS}`);
       const commentsCount = {
         id: id,
         count: data.length,
@@ -91,7 +91,7 @@ export const fetchCommentsCountAction = (id: string): ThunkActionResult =>
 export const fetchCommentsAction = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const {data} = await api.get<CommentType[]>(`${APIRoute.GUITARS}/${id}${APIRoute.COMMENTS}`);
+      const { data } = await api.get<CommentType[]>(`${APIRoute.GUITARS}/${id}${APIRoute.COMMENTS}`);
       dispatch(loadComments(data));
     } catch {
       toast.error('Ошибка при загрузке комментариев');
@@ -102,10 +102,19 @@ export const sendNewCommentAction = (comment: CommentPostType): ThunkActionResul
   async (dispatch, _getState, api): Promise<void> => {
     try {
       await api.post<CommentPostType>(`${APIRoute.GUITARS}/${comment.guitarId}${APIRoute.COMMENTS}`, comment);
-      if (comment.guitarId !== undefined){
+      if (comment.guitarId !== undefined) {
         dispatch(fetchCommentsAction(comment.guitarId.toString()));
       }
     } catch {
       toast.error('Ошибка при отправке комментария');
+    }
+  };
+
+export const postCouponAction = (coupon: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      await api.post<string>(APIRoute.COUPONS, { coupon });
+    } catch {
+      toast.error('Ошибка при отправке промокода');
     }
   };
