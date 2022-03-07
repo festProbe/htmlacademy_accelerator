@@ -22,9 +22,9 @@ import {
   setSortType,
   setStringsCounts
 } from '../../store/actions';
-import AddToCart from './add-to-cart-popup/add-to-cart-popup';
+import AddToCartPopup from './add-to-cart-popup/add-to-cart-popup';
 import { GuitarType } from '../../types/data';
-import SuccessAddedToCart from './success-added-to-cart-popup/success-added-to-cart-popup';
+import SuccessAddedToCartPopup from './success-added-to-cart-popup/success-added-to-cart-popup';
 
 function Main(): JSX.Element {
   const dispatch = useDispatch();
@@ -110,8 +110,8 @@ function Main(): JSX.Element {
             <Pages setQueryParams={setQuery} />
           </div>
         </div>
-        {addingGuitarToCart !== null ? <AddToCart guitar={addingGuitarToCart} setAddingGuitarToCart={setAddingGuitarToCart} setIsAddingSuccessfulOpen={setIsAddingSuccessfulOpen} /> : ''}
-        {isAddingSuccessfulOpen ? <SuccessAddedToCart setIsAddingSuccessfulOpen={setIsAddingSuccessfulOpen} /> : ''}
+        {addingGuitarToCart !== null ? <AddToCartPopup guitar={addingGuitarToCart} setAddingGuitarToCart={setAddingGuitarToCart} setIsAddingSuccessfulOpen={setIsAddingSuccessfulOpen} /> : ''}
+        {isAddingSuccessfulOpen ? <SuccessAddedToCartPopup setIsAddingSuccessfulOpen={setIsAddingSuccessfulOpen} /> : ''}
       </main>
     </MainLayout>
   );

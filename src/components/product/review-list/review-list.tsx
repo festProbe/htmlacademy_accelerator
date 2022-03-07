@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import { CommentType } from '../../../types/data';
 import ReviewItem from '../review-item/review-item';
 import { MouseEvent, useEffect, useState } from 'react';
-import NewReview from '../new-review-popup/new-review-popup';
-import NewReviewSuccess from '../new-review-success-popup/new-review-success-popup';
+import NewReviewPopup from '../new-review-popup/new-review-popup';
+import NewReviewSuccessPopup from '../new-review-success-popup/new-review-success-popup';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { selectComments } from '../../../store/selectors';
@@ -125,8 +125,8 @@ function ReviewList(): JSX.Element {
         Наверх
       </button>
       {isModalOpened ?
-        <NewReview setIsModalOpened={setIsModalOpened} setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
-      {isSuccessModalOpened ? <NewReviewSuccess setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
+        <NewReviewPopup setIsModalOpened={setIsModalOpened} setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
+      {isSuccessModalOpened ? <NewReviewSuccessPopup setIsSuccessModalOpened={setIsSuccessModalOpened} /> : ''}
     </section>
   );
 }
