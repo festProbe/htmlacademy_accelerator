@@ -28,6 +28,7 @@ export const selectSortOrder = (state: ReducerState): string => state.sortOrder;
 export const selectGuitarTypes = (state: ReducerState): (string | null)[] => state.guitarTypes;
 export const selectStringsCounts = (state: ReducerState): (string | null)[] => state.stringsCounts;
 export const selectGuitarsCount = (state: ReducerState): number => state.totalCount;
+export const selectDiscount = (state: ReducerState): number => state.discount;
 export const selectCurrentPage = (state: ReducerState): number => state.currentPage;
 export const selectGuitar = (state: ReducerState): GuitarType | null => state.guitar;
 export const selectCommentsCount = (state: ReducerState): CommentsCount[] => state.commentsCount;

@@ -97,7 +97,7 @@ function Product(): JSX.Element {
           <div className="product-container">
             <img className="product-container__img"
               src={`../${previewImg}`}
-              srcSet={`%PUBLIC_URL%/${previewImg} 2x`}
+              srcSet={`../${previewImg} 2x`}
               width="90"
               height="235"
               alt={name}
@@ -147,7 +147,7 @@ function Product(): JSX.Element {
             </div>
             <div className="product-container__price-wrapper">
               <p className="product-container__price-info product-container__price-info--title">Цена:</p>
-              <p className="product-container__price-info product-container__price-info--value">{price} ₽</p>
+              <p className="product-container__price-info product-container__price-info--value">{price.toLocaleString()} ₽</p>
               <Link className="button button--red button--big product-container__button" to="/" onClick={clickAddToCartHandler}>
                 Добавить в корзину
               </Link>

@@ -1,15 +1,12 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { postCouponAction } from '../../../store/api-actions';
+import { selectDiscount } from '../../../store/selectors';
 
-type PromoPropsType = {
-  setIsDiscountUsed: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function Promo({ setIsDiscountUsed }: PromoPropsType): JSX.Element {
+function Promo(): JSX.Element {
   const dispatch = useDispatch();
   const [userText, setUserText] = useState<string | null>('');
-  const [isPromoActive, setIsPromoActive] = useState(false);
+  const discount = useSelector(selectDiscount);
   const PROMO_CODES = [
     'light-333',
     'medium-444',
@@ -32,8 +29,6 @@ function Promo({ setIsDiscountUsed }: PromoPropsType): JSX.Element {
     evt.preventDefault();
     if (userText && PROMO_CODES.includes(userText)) {
       dispatch(postCouponAction(userText));
-      setIsDiscountUsed(true);
-      setIsPromoActive(true);
     }
     if (userText && !PROMO_CODES.includes(userText)) {
       document.querySelector('.form-input__message--error')?.classList.remove('hidden');
@@ -46,10 +41,10 @@ function Promo({ setIsDiscountUsed }: PromoPropsType): JSX.Element {
       <form className="coupon__form" id="coupon-form" method="post" action="/">
         <div className="form-input coupon__input">
           <label className="visually-hidden">Промокод</label>
-          <input type="text" placeholder="Введите промокод" id="coupon" name="coupon" onChange={onChangeHandler} value={userText ? userText : ''} disabled={isPromoActive} />
-          {isPromoActive ? <p className="form-input__message form-input__message--success">Промокод принят</p> : <p className="form-input__message form-input__message--error hidden">неверный промокод</p>}
+          <input type="text" placeholder="Введите промокод" id="coupon" name="coupon" onChange={onChangeHandler} value={userText ? userText : ''} disabled={discount !== 0} />
+          {discount !== 0 ? <p className="form-input__message form-input__message--success">Промокод принят</p> : <p className="form-input__message form-input__message--error hidden">неверный промокод</p>}
         </div>
-        <button className="button button--big coupon__button" onClick={clickUsePromoHandler} disabled={isPromoActive}>Применить</button>
+        <button className="button button--big coupon__button" onClick={clickUsePromoHandler} disabled={discount !== 0}>Применить</button>
       </form>
     </div>
   );

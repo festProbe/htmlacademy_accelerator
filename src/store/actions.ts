@@ -12,6 +12,7 @@ export const setIsGuitarsLoaded = createAction<boolean>(ActionType.SetIsGuitarsL
 export const loadProductInfo = createAction<GuitarType>(ActionType.LoadProductInfo);
 export const setIsGuitarLoaded = createAction<boolean>(ActionType.SetIsGuitarLoaded);
 export const loadTotalCount = createAction<number>(ActionType.LoadTotalCount);
+export const loadDiscount = createAction<number>(ActionType.LoadDiscount);
 export const loadCommentsCount = createAction<CommentsCount>(ActionType.LoadCommentsCount);
 export const loadComments = createAction<CommentType[]>(ActionType.LoadComments);
 export const setCurrentPage = createAction<number>(ActionType.SetCurrentPage);

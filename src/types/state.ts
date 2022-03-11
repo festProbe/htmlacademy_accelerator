@@ -8,6 +8,7 @@ export type ReducerState = {
   guitar: GuitarType | null,
   isGuitarLoaded: boolean,
   totalCount: number,
+  discount: number,
   comments: CommentType[],
   commentsCount: CommentsCount[],
   currentPage: number,

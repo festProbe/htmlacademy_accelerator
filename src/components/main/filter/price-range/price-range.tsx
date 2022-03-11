@@ -1,21 +1,21 @@
-import {ChangeEvent, FocusEvent, useEffect, useState} from 'react';
-import {setMaxPrice, setMinPrice} from '../../../../store/actions';
-import {useDebouncedCallback} from 'use-debounce';
-import {useDispatch, useSelector} from 'react-redux';
+import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
+import { setMaxPrice, setMinPrice } from '../../../../store/actions';
+import { useDebouncedCallback } from 'use-debounce';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   selectMaxPrice,
   selectMaxPriceForPlaceholder,
   selectMinPrice,
   selectMinPriceForPlaceholder
 } from '../../../../store/selectors';
-import {SetQuery} from 'use-query-params';
-import {Params} from '../../../../types/params';
+import { SetQuery } from 'use-query-params';
+import { Params } from '../../../../types/params';
 
-type PriceRangeProps={
+type PriceRangeProps = {
   setQueryParams: SetQuery<Params>,
 }
 
-function PriceRange ({setQueryParams}: PriceRangeProps):JSX.Element {
+function PriceRange({ setQueryParams }: PriceRangeProps): JSX.Element {
   const dispatch = useDispatch();
   const placeholderMin = useSelector(selectMinPriceForPlaceholder);
   const placeholderMax = useSelector(selectMaxPriceForPlaceholder);
@@ -43,9 +43,9 @@ function PriceRange ({setQueryParams}: PriceRangeProps):JSX.Element {
     if (value !== undefined && value.match(number)) {
       setMinPriceText(value);
       Number(maxPrice) > 0
-        ?debounceOnChangeMinPrice(Math.min(Math.max(placeholderMin, Number(value)), Number(maxPrice)).toString())
-        :debounceOnChangeMinPrice(Math.max(placeholderMin, Number(value)).toString());
-    } else if (value === ''){
+        ? debounceOnChangeMinPrice(Math.min(Math.max(placeholderMin, Number(value)), Number(maxPrice)).toString())
+        : debounceOnChangeMinPrice(Math.max(placeholderMin, Number(value)).toString());
+    } else if (value === '') {
       setMinPriceText(value);
       debounceOnChangeMinPrice(value);
     }
@@ -53,10 +53,10 @@ function PriceRange ({setQueryParams}: PriceRangeProps):JSX.Element {
 
   const blurMinPriceInputHandler = (evt: FocusEvent<HTMLInputElement>) => {
     const value = evt.currentTarget.value;
-    if (value !== ''){
+    if (value !== '') {
       Number(maxPrice) > 0
-        ?setMinPriceText(Math.min(Math.max(placeholderMin, Number(value)), Number(maxPrice)).toString())
-        :setMinPriceText(Math.max(placeholderMin, Number(value)).toString());
+        ? setMinPriceText(Math.min(Math.max(placeholderMin, Number(value)), Number(maxPrice)).toString())
+        : setMinPriceText(Math.max(placeholderMin, Number(value)).toString());
     }
   };
 
@@ -66,10 +66,10 @@ function PriceRange ({setQueryParams}: PriceRangeProps):JSX.Element {
     if (value !== undefined && value.match(number)) {
       setMaxPriceText(value);
       Number(minPrice) > 0
-        ?debounceOnChangeMaxPrice(Math.max(Math.min(placeholderMax, Number(value)), Number(minPrice)).toString())
-        :debounceOnChangeMaxPrice(Math.min(placeholderMax, Number(value)).toString());
+        ? debounceOnChangeMaxPrice(Math.max(Math.min(placeholderMax, Number(value)), Number(minPrice)).toString())
+        : debounceOnChangeMaxPrice(Math.min(placeholderMax, Number(value)).toString());
 
-    } else if (value === ''){
+    } else if (value === '') {
       setMaxPriceText(value);
       debounceOnChangeMaxPrice(value);
     }
@@ -77,10 +77,10 @@ function PriceRange ({setQueryParams}: PriceRangeProps):JSX.Element {
 
   const blurMaxPriceInputHandler = (evt: FocusEvent<HTMLInputElement>) => {
     const value = evt.currentTarget.value;
-    if (value !== ''){
+    if (value !== '') {
       Number(minPrice) > 0
-        ?setMaxPriceText(Math.max(Math.min(placeholderMax, Number(value)), Number(minPrice)).toString())
-        :setMaxPriceText(Math.min(placeholderMax, Number(value)).toString());
+        ? setMaxPriceText(Math.max(Math.min(placeholderMax, Number(value)), Number(minPrice)).toString())
+        : setMaxPriceText(Math.min(placeholderMax, Number(value)).toString());
     }
   };
 
@@ -92,7 +92,7 @@ function PriceRange ({setQueryParams}: PriceRangeProps):JSX.Element {
           <label className="visually-hidden">Минимальная цена</label>
           <input type="number"
             min={0}
-            placeholder={placeholderMin.toString()}
+            placeholder={placeholderMin.toLocaleString()}
             id="priceMin"
             name="от"
             onChange={changeMinPriceHandler}
@@ -105,7 +105,7 @@ function PriceRange ({setQueryParams}: PriceRangeProps):JSX.Element {
           <input
             type="number"
             min={0}
-            placeholder={placeholderMax.toString()}
+            placeholder={placeholderMax.toLocaleString()}
             id="priceMax"
             name="до"
             onChange={changeMaxPriceHandler}

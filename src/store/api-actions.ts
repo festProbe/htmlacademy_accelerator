@@ -11,7 +11,8 @@ import {
   setMaxPricePlaceholder,
   loadAllGuitars,
   setIsGuitarsLoaded,
-  setIsGuitarLoaded
+  setIsGuitarLoaded,
+  loadDiscount
 } from './actions';
 import { toast } from 'react-toastify';
 
@@ -113,7 +114,8 @@ export const sendNewCommentAction = (comment: CommentPostType): ThunkActionResul
 export const postCouponAction = (coupon: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      await api.post<string>(APIRoute.COUPONS, { coupon });
+      const { data } = await api.post<string>(APIRoute.COUPONS, { coupon });
+      dispatch(loadDiscount(Number(data)));
     } catch {
       toast.error('Ошибка при отправке промокода');
     }

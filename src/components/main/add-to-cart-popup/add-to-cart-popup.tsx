@@ -66,12 +66,12 @@ function AddToCartPopup({ guitar, setAddingGuitarToCart, setIsAddingSuccessfulOp
             <div className="modal__content" ref={addingToCartModalRef}>
               <h2 className="modal__header title title--medium">Добавить товар в корзину</h2>
               <div className="modal__info">
-                <img className="modal__img" src={`../${previewImg}`} width="67" height="137" alt={name} />
+                <img className="modal__img" src={previewImg} width="67" height="137" alt={name} />
                 <div className="modal__info-wrapper">
                   <h3 className="modal__product-name title title--little title--uppercase">{`Гитара ${name}`}</h3>
                   <p className="modal__product-params modal__product-params--margin-11">{`Артикул: ${vendorCode}`}</p>
                   <p className="modal__product-params">{`${getRuGuitarType(type)}, ${stringCount} струнная`}</p>
-                  <p className="modal__price-wrapper"><span className="modal__price">Цена:</span><span className="modal__price">{`${price} ₽`}</span></p>
+                  <p className="modal__price-wrapper"><span className="modal__price">Цена:</span><span className="modal__price">{`${price.toLocaleString()} ₽`}</span></p>
                 </div>
               </div>
               <div className="modal__button-container">

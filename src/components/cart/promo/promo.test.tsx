@@ -18,7 +18,7 @@ const store = mockStore(initialState);
 const fakePromo = (
   <Provider store={store}>
     <Router history={history}>
-      <Promo setIsDiscountUsed={jest.fn()} />
+      <Promo />
     </Router>
   </Provider>
 );

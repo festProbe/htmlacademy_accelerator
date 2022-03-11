@@ -14,6 +14,7 @@ export enum ActionType {
   LoadProductInfo = 'product/productInfo',
   SetIsGuitarLoaded = 'product/isGuitarLoaded',
   LoadTotalCount = 'main/loadTotalCount',
+  LoadDiscount = 'cart/discount',
   LoadComments = 'product/loadComments',
   LoadCommentsCount = 'main/loadCommentsCount',
   SetCurrentPage = 'main/setCurrentPage',

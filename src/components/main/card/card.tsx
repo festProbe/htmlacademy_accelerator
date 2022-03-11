@@ -52,7 +52,7 @@ function Card({ guitar, commentsCount, setAddingGuitarToCart }: CardProps): JSX.
           <span className="rate__count">{commentsCount}</span><span className="rate__message"></span>
         </div>
         <p className="product-card__title">{name}</p>
-        <p className="product-card__price"><span className="visually-hidden">Цена:</span>{price} ₽
+        <p className="product-card__price"><span className="visually-hidden">Цена:</span>{price.toLocaleString()} ₽
         </p>
       </div>
       <div className="product-card__buttons">

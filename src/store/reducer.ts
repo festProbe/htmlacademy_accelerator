@@ -6,6 +6,7 @@ import {
   loadCommentsCount,
   loadAllGuitars,
   loadGuitars,
+  loadDiscount,
   putGuitarInCart,
   setCustomGuitarCount,
   decreseGuitarInCart,
@@ -34,6 +35,7 @@ const initialState: ReducerState = {
   guitar: null,
   isGuitarLoaded: false,
   totalCount: 0,
+  discount: 0,
   commentsCount: [],
   comments: [],
   currentPage: 1,
@@ -109,6 +111,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadGuitars, (state, action) => {
       state.guitars = action.payload;
+    })
+    .addCase(loadDiscount, (state, action) => {
+      state.discount = action.payload;
     })
     .addCase(putGuitarInCart, (state, action) => {
       state.guitarsInCart = putGuitarsInCart(state, action.payload);
